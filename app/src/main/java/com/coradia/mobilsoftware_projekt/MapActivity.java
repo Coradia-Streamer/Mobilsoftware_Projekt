@@ -83,8 +83,8 @@ public class MapActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         new Thread(() -> {
             while (!toggleProgress) {
-                //handler.post(() -> progressBar.setProgress(progressStatus));
                 try {
+                    //noinspection BusyWait
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -204,6 +204,7 @@ public class MapActivity extends AppCompatActivity {
         );
     }
 
+    /** @noinspection SameParameterValue*/
     private String getMapServerAuthorizationString(String username, String password) {
         String authorizationString = String.format("%s:%s", username, password);
         return "Basic " + Base64.encodeToString(authorizationString.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
