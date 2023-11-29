@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Uebung02_Java</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="settings">Einstellungen</string>
+    <string name="name">Felix Hausser</string>
+    <string name="contact">felix.hausser@mail.com\n+49 123456789</string>
+    <string name="button_contact">Kontaktieren</string>
+    <string name="multiline_text">Nachricht eingeben</string>
+    <string name="info_text">Sie haben folgende Nachricht versendet:</string>
+    <string name="button_send">ABSENDEN</string>
+    <string name="firstButton">KLICK!</string>
+    <string name="secondButton">WEITER</string>
+    <string name="backButton">ZURÜCK</string>
+    <string name="mapButton">KARTE</string>
+    <string name="mobscore">Mobilitäts-Score:</string>
+    <string name="bad">Schlecht</string>
+    <string name="acceptable">Akzeptabel</string>
+    <string name="good">Gut</string>
+    <string name="extraordinary">Ausgezeichnet</string>
+</resources>
