@@ -21,6 +21,13 @@ import androidx.core.app.ActivityCompat;
 
 import com.coradia.mobilsoftware_projekt.network.EfaApiClient;
 import com.coradia.mobilsoftware_projekt.objects.EfaCoordResponse;
+import com.coradia.mobilsoftware_projekt.objects.EfaStopFinderResponse;
+import com.coradia.mobilsoftware_projekt.objects.Location;
+import com.coradia.mobilsoftware_projekt.objects.LocationAssignedStops;
+import com.coradia.mobilsoftware_projekt.objects.LocationAssignedStopsProperties;
+import com.coradia.mobilsoftware_projekt.objects.LocationParent;
+import com.coradia.mobilsoftware_projekt.objects.LocationProperties;
+import com.coradia.mobilsoftware_projekt.objects.ProductClassMeaning;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -36,6 +43,7 @@ import org.osmdroid.views.MapView;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -209,4 +217,156 @@ public class MapActivity extends AppCompatActivity {
         String authorizationString = String.format("%s:%s", username, password);
         return "Basic " + Base64.encodeToString(authorizationString.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
     }
+
+    private final List<StopInfo> stopInfoList = new ArrayList<>();
+
+    private void leereStopInfoList() {
+        stopInfoList.clear();
+    }
+
+    private void loggeStopInfoListe() {
+        for (StopInfo daten : stopInfoList) {
+            String logText = String.format(
+                    "Index: %d, Stadtname: %s, Haltestellenname: %s, Entfernung: %.2f, Verkehrsmittel: %s, StationID: %s",
+                    daten.getIndex(),
+                    daten.getStadt_Name(),
+                    daten.getHaltestellen_Name(),
+                    daten.getEntfernung(),
+                    daten.getProductClassesString(),
+                    daten.getStationid()
+            );
+
+            Log.d("MapActivity", logText);
+        }
+    }
+
+
+    private void loadClosestStops(double latitude, double longitude) {
+        Call<EfaCoordResponse> efaCall = EfaApiClient
+                .getInstance()
+                .getClient()
+                .loadStopsWithinRadius(
+                        EfaApiClient
+                                .getInstance()
+                                .createCoordinateString(
+                                        latitude,
+                                        longitude
+                                ),
+                        10000
+                );
+
+        efaCall.enqueue(new Callback<EfaCoordResponse>() {
+            @Override
+            public void onResponse(Call<EfaCoordResponse> call, Response<EfaCoordResponse> response) {
+                Log.d("MapActivity", String.format("Response %d Locations", response.body().getLocations().size()));
+                List<Location> locations = response.body().getLocations();
+
+                leereStopInfoList();
+                if (stopInfoList.isEmpty()) {
+                    Log.d("MapActivity", "StopInfoListe geleert");
+                } else
+                    Log.d("MapActivity", "Leerung schlug fehl!");
+
+                for (int i = 0; i < locations.size(); i++) {
+                    Location location = locations.get(i);
+                    String Haltestellen_Name = location.getName();
+
+                   LocationProperties distance = location.properties;
+                    double Entfernung = distance.getDistance();
+
+                    LocationParent locationName = location.parent;
+                    String Stadt_Name = locationName.getName();
+
+                    int[] productClasses = location.getProductClasses();
+
+                    StringBuilder productClassesString = new StringBuilder();
+                    for (int classValue : productClasses) {
+                        String classMeaning = ProductClassMeaning.getClassMeaning(classValue);
+                        productClassesString.append(classMeaning).append(", ");
+                    }
+
+                    if (productClassesString.length() > 0) {
+                        productClassesString.setLength(productClassesString.length() - 2);
+                    }
+
+                    int productNumber = productClasses.length;
+
+                    String stationid = location.getId();
+
+                    StopInfo stopInfo = new StopInfo(i, Stadt_Name, Haltestellen_Name, Entfernung, productClassesString.toString(), stationid);
+                    stopInfoList.add(stopInfo);
+
+
+
+
+
+                 /* if (productNumber >= 2) {
+                  Log.d("MapActivity", String.format("Die %d. Haltestelle namens %s %s ist %.2f m entfernt. Dort verkehren %s. Die Haltestelle hat die ID: %s", i+1, Stadt_Name, Haltestellen_Name, Entfernung, productClassesString.toString(), stationid));
+              } else if (productNumber == 1) {
+                      Log.d("MapActivity", String.format("Die %d. Haltestelle namens %s %s ist %.2f m entfernt. Dort verkehrt %s. Die Haltestelle hat die ID: %s", i+1, Stadt_Name, Haltestellen_Name, Entfernung, productClassesString.toString(), stationid));
+                  } else {
+                      Log.d("MapActivity", String.format("Die %d. Haltestelle namens %s %s ist %.2f m entfernt. Hier verkehrt derzeit nichts. Die Haltestelle hat die ID: %s", i+1, Stadt_Name, Haltestellen_Name, Entfernung, stationid));
+                  } */
+                }
+
+                loggeStopInfoListe();
+
+
+                /*for (StopInfo daten : stopInfoList) {
+                    String stationid = daten.getStationid();
+                    requestStation(stationid);
+
+                }*/
+
+            }
+
+
+            @Override
+            public void onFailure(Call<EfaCoordResponse> call, Throwable t) {
+                Log.d("MapActivity", "Failure");
+            }
+        });
+    }
 }
+
+
+/*
+    private void requestStation(String stationID) {
+
+        Call<EfaStopFinderResponse> efaCall = EfaApiClient
+                .getInstance()
+                .getClient()
+                .requestStation(stationID);
+
+        efaCall.enqueue(new Callback<EfaStopFinderResponse>() {
+            @Override
+            public void onResponse(Call<EfaStopFinderResponse> call, Response<EfaStopFinderResponse> response) {
+                Log.d("MapActivity", String.format("Response %d Locations", response.body().getLocations().size()));
+                List<Location> locations = response.body().getLocations();
+
+                for (int i = 0; i < locations.size(); i++) {
+                    Location location = locations.get(i);
+                    List<LocationAssignedStops> locationAssignedStops = location.getAssignedStops();
+                    LocationAssignedStopsProperties locationAssignedStopsProperties = locationAssignedStops.getLocationAssignedStopsProperties();
+                    String stopID = locationAssignedStopsProperties.getStopID();
+
+                    Log.d("MapActivity", String.format("Die StopID lautet %s", stopID));
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<EfaStopFinderResponse> call, Throwable t) {
+                Log.e("MapActivity", "Fehler beim Aufrufen der API", t);
+
+            }
+
+        });
+
+
+    }
+
+
+} */

@@ -2,7 +2,10 @@ package com.coradia.mobilsoftware_projekt.objects;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Location {
+
     @SerializedName("id")
     public String id;
 
@@ -10,13 +13,20 @@ public class Location {
     public String name;
 
     @SerializedName("coord")
-    public double[] coord;
+    public double[] coordinates;
 
     @SerializedName("productClasses")
-    private int[] productClasses;
+    public int[] productClasses;
+
+    @SerializedName("parent")
+    public LocationParent parent;
 
     @SerializedName("properties")
-    private LocationProperties properties;
+    public LocationProperties properties;
+
+    @SerializedName("assignedStops")
+    public List<LocationAssignedStops> assignedStops;
+
 
     public String getId() {
         return id;
@@ -27,7 +37,7 @@ public class Location {
     }
 
     public double[] getCoord() {
-        return coord;
+        return coordinates;
     }
 
     public int[] getProductClasses() {
@@ -36,5 +46,9 @@ public class Location {
 
     public LocationProperties getProperties() {
         return properties;
+    }
+
+    public List<LocationAssignedStops> getAssignedStops() {
+        return assignedStops;
     }
 }
