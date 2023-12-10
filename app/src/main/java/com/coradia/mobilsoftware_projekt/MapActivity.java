@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -16,11 +17,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.coradia.mobilsoftware_projekt.network.EfaApiClient;
 import com.coradia.mobilsoftware_projekt.objects.EfaCoordResponse;
+import com.coradia.mobilsoftware_projekt.objects.EfaDepartureMonitor;
 import com.coradia.mobilsoftware_projekt.objects.EfaStopFinderResponse;
 import com.coradia.mobilsoftware_projekt.objects.Location;
 import com.coradia.mobilsoftware_projekt.objects.LocationAssignedStops;
@@ -28,6 +31,7 @@ import com.coradia.mobilsoftware_projekt.objects.LocationAssignedStopsProperties
 import com.coradia.mobilsoftware_projekt.objects.LocationParent;
 import com.coradia.mobilsoftware_projekt.objects.LocationProperties;
 import com.coradia.mobilsoftware_projekt.objects.ProductClassMeaning;
+import com.coradia.mobilsoftware_projekt.objects.StopEvents;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -41,9 +45,15 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -154,7 +164,7 @@ public class MapActivity extends AppCompatActivity {
 
         efaCall.enqueue(new Callback<EfaCoordResponse>() {
             @Override
-            public void onResponse(@NonNull Call<EfaCoordResponse> call, @NonNull Response<EfaCoordResponse> response) {
+            public void onResponse(Call<EfaCoordResponse> call, Response<EfaCoordResponse> response) {
                 Log.d("MapActivity", String.format("Response %d Locations", Objects.requireNonNull(response.body()).getLocations().size()));
                 String[] locations = new String[response.body().getLocations().size()];
                 for (int i = 0; i < response.body().getLocations().size(); i++) {
@@ -173,8 +183,8 @@ public class MapActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<EfaCoordResponse> call, @NonNull Throwable t) {
-                Log.d("MapActivity", "Failure");
+            public void onFailure(Call<EfaCoordResponse> call, Throwable t) {
+                Log.e("MapActivity", "Failure");
             }
         });
     }
@@ -212,34 +222,15 @@ public class MapActivity extends AppCompatActivity {
         );
     }
 
-    /** @noinspection SameParameterValue*/
+    /**
+     * @noinspection SameParameterValue
+     */
     private String getMapServerAuthorizationString(String username, String password) {
         String authorizationString = String.format("%s:%s", username, password);
         return "Basic " + Base64.encodeToString(authorizationString.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
     }
 
     private final List<StopInfo> stopInfoList = new ArrayList<>();
-
-    private void leereStopInfoList() {
-        stopInfoList.clear();
-    }
-
-    private void loggeStopInfoListe() {
-        for (StopInfo daten : stopInfoList) {
-            String logText = String.format(
-                    "Index: %d, Stadtname: %s, Haltestellenname: %s, Entfernung: %.2f, Verkehrsmittel: %s, StationID: %s",
-                    daten.getIndex(),
-                    daten.getStadt_Name(),
-                    daten.getHaltestellen_Name(),
-                    daten.getEntfernung(),
-                    daten.getProductClassesString(),
-                    daten.getStationid()
-            );
-
-            Log.d("MapActivity", logText);
-        }
-    }
-
 
     private void loadClosestStops(double latitude, double longitude) {
         Call<EfaCoordResponse> efaCall = EfaApiClient
@@ -252,7 +243,7 @@ public class MapActivity extends AppCompatActivity {
                                         latitude,
                                         longitude
                                 ),
-                        10000
+                        1500
                 );
 
         efaCall.enqueue(new Callback<EfaCoordResponse>() {
@@ -261,7 +252,7 @@ public class MapActivity extends AppCompatActivity {
                 Log.d("MapActivity", String.format("Response %d Locations", response.body().getLocations().size()));
                 List<Location> locations = response.body().getLocations();
 
-                leereStopInfoList();
+                StopInfo.leereStopInfoList(stopInfoList);
                 if (stopInfoList.isEmpty()) {
                     Log.d("MapActivity", "StopInfoListe geleert");
                 } else
@@ -271,7 +262,7 @@ public class MapActivity extends AppCompatActivity {
                     Location location = locations.get(i);
                     String Haltestellen_Name = location.getName();
 
-                   LocationProperties distance = location.properties;
+                    LocationProperties distance = location.properties;
                     double Entfernung = distance.getDistance();
 
                     LocationParent locationName = location.parent;
@@ -292,81 +283,138 @@ public class MapActivity extends AppCompatActivity {
                     int productNumber = productClasses.length;
 
                     String stationid = location.getId();
+                    int departures = 0;
 
-                    StopInfo stopInfo = new StopInfo(i, Stadt_Name, Haltestellen_Name, Entfernung, productClassesString.toString(), stationid);
+                    StopInfo stopInfo = new StopInfo(i, Stadt_Name, Haltestellen_Name, Entfernung, productClassesString.toString(), stationid, departures);
                     stopInfoList.add(stopInfo);
-
-
-
-
-
-                 /* if (productNumber >= 2) {
-                  Log.d("MapActivity", String.format("Die %d. Haltestelle namens %s %s ist %.2f m entfernt. Dort verkehren %s. Die Haltestelle hat die ID: %s", i+1, Stadt_Name, Haltestellen_Name, Entfernung, productClassesString.toString(), stationid));
-              } else if (productNumber == 1) {
-                      Log.d("MapActivity", String.format("Die %d. Haltestelle namens %s %s ist %.2f m entfernt. Dort verkehrt %s. Die Haltestelle hat die ID: %s", i+1, Stadt_Name, Haltestellen_Name, Entfernung, productClassesString.toString(), stationid));
-                  } else {
-                      Log.d("MapActivity", String.format("Die %d. Haltestelle namens %s %s ist %.2f m entfernt. Hier verkehrt derzeit nichts. Die Haltestelle hat die ID: %s", i+1, Stadt_Name, Haltestellen_Name, Entfernung, stationid));
-                  } */
                 }
 
-                loggeStopInfoListe();
 
-
-                /*for (StopInfo daten : stopInfoList) {
+                for (StopInfo daten : stopInfoList) {
                     String stationid = daten.getStationid();
-                    requestStation(stationid);
+                    requestDeparture(stationid);
+                }
 
-                }*/
+
+                StopInfo.loggeStopInfoListe(stopInfoList);
+
 
             }
 
 
             @Override
             public void onFailure(Call<EfaCoordResponse> call, Throwable t) {
-                Log.d("MapActivity", "Failure");
+                Log.e("MapActivity", "Failure");
             }
         });
     }
-}
 
+    private final List<String> stopDepartureList = new ArrayList<>();
 
-/*
-    private void requestStation(String stationID) {
+    private void leereStopDepartureList() {
+        stopDepartureList.clear();
+    }
 
-        Call<EfaStopFinderResponse> efaCall = EfaApiClient
+    private void requestDeparture(String stationID) {
+
+        Call<EfaDepartureMonitor> efaCall = EfaApiClient
                 .getInstance()
                 .getClient()
-                .requestStation(stationID);
+                .requestDeparture(stationID);
 
-        efaCall.enqueue(new Callback<EfaStopFinderResponse>() {
+        efaCall.enqueue(new Callback<EfaDepartureMonitor>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void onResponse(Call<EfaStopFinderResponse> call, Response<EfaStopFinderResponse> response) {
-                Log.d("MapActivity", String.format("Response %d Locations", response.body().getLocations().size()));
-                List<Location> locations = response.body().getLocations();
+            public void onResponse(Call<EfaDepartureMonitor> call, Response<EfaDepartureMonitor> response) {
+                Log.d("MapActivity", String.format("Es folgen die Abfahrten der Haltestelle %s", stationID));
 
-                for (int i = 0; i < locations.size(); i++) {
-                    Location location = locations.get(i);
-                    List<LocationAssignedStops> locationAssignedStops = location.getAssignedStops();
-                    LocationAssignedStopsProperties locationAssignedStopsProperties = locationAssignedStops.getLocationAssignedStopsProperties();
-                    String stopID = locationAssignedStopsProperties.getStopID();
+                leereStopDepartureList();
 
-                    Log.d("MapActivity", String.format("Die StopID lautet %s", stopID));
+
+                //Abfrage aktueller Zeit und Erstellung Vergleichszeit
+                Date currentTime = Calendar.getInstance().getTime();
+                Log.d("Time","Aktuelle Zeit: "+currentTime);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.GERMANY);
+                String formattedCurrentTime = sdf.format(currentTime);
+                Log.d("Time","ISO 8601 Zeit: " + formattedCurrentTime);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentTime);
+
+                calendar.add(Calendar.HOUR, 0);
+                calendar.add(Calendar.MINUTE,30);
+
+                Date compareTime = calendar.getTime();
+                String formattedCompareTime = sdf.format(compareTime);
+                Log.d("Time","Vergleichszeit ISO 8601:" +formattedCompareTime);
+
+                Instant instant = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    instant = Instant.now();
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    System.out.println("Instant: " + DateTimeFormatter.ISO_INSTANT.format(instant));
+                }
+
+                //TEST!!!!!!!!!!!!!!!!!!!!
+                String target = "+0000";
+                String replacement = "Z";
+                String ZformattedCompareTime = formattedCompareTime.replace(target,replacement);
+
+
+                if (response.body().getstopEvents() == null) {
+                    Log.d("MapActivity", "keine Abfahrten");
+                } else {
+
+                    Log.d("MapActivity", String.format("Response %d Departures", response.body().getstopEvents().size()));
+                    List<StopEvents> stopEvents = response.body().getstopEvents();
+
+                    for (int i = 0; i < stopEvents.size(); i++) {
+                        StopEvents stopEvent = stopEvents.get(i);
+                        String DepartureTimePlanned = stopEvent.getDepartureTimePlanned();
+
+                        Instant instantCompare = Instant.parse(ZformattedCompareTime);
+                        Instant instantDeparture = Instant.parse(DepartureTimePlanned);
+
+                        if (instantCompare.isAfter(instantDeparture)){
+                            Log.d("MapActivity", String.format("Die Abfahrt ist um %s und somit vor %s", DepartureTimePlanned, ZformattedCompareTime));
+                            stopDepartureList.add(DepartureTimePlanned);
+                        }
+
+                        //Log.d("MapActivity", String.format("Die Abfahrt ist um %s", DepartureTimePlanned));
+
+                    }
+                }
+
+                for(StopInfo stopInfo : stopInfoList) {
+                    if(stopInfo.getStationid() != null){
+                        if(stopInfo.getStationid().equals(stationID)){
+                            int departures = stopDepartureList.size();
+                            Log.d("MapActivity", String.format("Die Haltestelle %s hat %s Abfahrten", stationID, departures));
+                            stopInfo.setDepartures(departures);
+
+                            int lastindex = stopInfoList.size() - 1;
+                            StopInfo stopInfo1 = stopInfoList.get(lastindex);
+                            Log.d("MapActivity","Letzte Station ID: " + stopInfo1.getStationid());
+                            if (stopInfo1.getStationid() == stationID) {
+                                StopInfo.loggeStopInfoListe(stopInfoList);
+                            }
+
+                        }
+                    }
 
                 }
 
-
             }
 
             @Override
-            public void onFailure(Call<EfaStopFinderResponse> call, Throwable t) {
+            public void onFailure(Call<EfaDepartureMonitor> call, Throwable t) {
                 Log.e("MapActivity", "Fehler beim Aufrufen der API", t);
-
             }
-
         });
-
-
     }
 
 
-} */
+}
+
