@@ -5,6 +5,9 @@ import java.util.Map;
 
 
 public class ProductClassMeaning {
+
+    //Die einzelnen Vekehrsmittel werden unter ProductClass angegeben. Dabei werden Zahlen verwendet, die jeweils für ein Verkehrsmittel stehen. Hier werden die einzelnen Zahlen dem tatsächlichen Verkehrsmittel zugeordnet.
+    //Die Bedeutung der einzelnen Zahlen werden unter anderem beim DepartureMonitor mitgeliefert: https://www.bwegt.de/bwegt-efa/XML_DM_REQUEST?commonMacro=dm&typ%20e_dm=any&type_dm=any&name_dm=7003104&mode=direct&limit=1 -> siehe Abschnitt "excludedMeans"
     private static final Map<Integer, String> classMeaning = new HashMap<>();
 
     static {

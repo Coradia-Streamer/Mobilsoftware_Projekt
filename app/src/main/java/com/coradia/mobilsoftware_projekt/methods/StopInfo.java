@@ -1,4 +1,4 @@
-package com.coradia.mobilsoftware_projekt;
+package com.coradia.mobilsoftware_projekt.methods;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -8,22 +8,22 @@ import java.util.List;
 public class StopInfo {
 
     private int index;
-    private String stadt_Name;
-    private String haltestellen_Name;
+    private String stadtName;
+    private String haltestellenName;
     private double entfernung;
     private String productClassesString;
-    private String stationid;
+    private String stationId;
 
     private int departures;
 
 
-    public StopInfo(int index, String stadt_Name, String haltestellen_Name, double entfernung, String productClassesString, String stationid, int departures) {
+    public StopInfo(int index, String stadtName, String haltestellenName, double entfernung, String productClassesString, String stationId, int departures) {
         this.index = index;
-        this.stadt_Name = stadt_Name;
-        this.haltestellen_Name = haltestellen_Name;
+        this.stadtName = stadtName;
+        this.haltestellenName = haltestellenName;
         this.entfernung = entfernung;
         this.productClassesString = productClassesString;
-        this.stationid = stationid;
+        this.stationId = stationId;
         this.departures = departures;
     }
 
@@ -32,11 +32,11 @@ public class StopInfo {
             @SuppressLint("DefaultLocale") String logText = String.format(
                     "Index: %d, Stadtname: %s, Haltestellenname: %s, Entfernung: %.2f, Verkehrsmittel: %s, StationID: %s, Abfahrten: %s",
                     daten.getIndex(),
-                    daten.getStadt_Name(),
-                    daten.getHaltestellen_Name(),
+                    daten.getStadtName(),
+                    daten.getHaltestellenName(),
                     daten.getEntfernung(),
                     daten.getProductClassesString(),
-                    daten.getStationid(),
+                    daten.getStationId(),
                     daten.getDepartures()
             );
 
@@ -54,12 +54,12 @@ public class StopInfo {
         this.index = index;
     }
 
-    public void setStadt_Name(String stadt_Name) {
-        this.stadt_Name = stadt_Name;
+    public void setStadtName(String stadtName) {
+        this.stadtName = stadtName;
     }
 
-    public void setHaltestellen_Name(String haltestellen_Name) {
-        this.haltestellen_Name = haltestellen_Name;
+    public void setHaltestellenName(String haltestellenName) {
+        this.haltestellenName = haltestellenName;
     }
 
     public void setEntfernung(double entfernung) {
@@ -70,8 +70,8 @@ public class StopInfo {
         this.productClassesString = productClassesString;
     }
 
-    public void setStationid(String stationid) {
-        this.stationid = stationid;
+    public void setStationId(String stationId) {
+        this.stationId = stationId;
     }
 
     public void setDepartures(int departures) {
@@ -82,12 +82,12 @@ public class StopInfo {
         return index;
     }
 
-    public String getStadt_Name() {
-        return stadt_Name;
+    public String getStadtName() {
+        return stadtName;
     }
 
-    public String getHaltestellen_Name() {
-        return haltestellen_Name;
+    public String getHaltestellenName() {
+        return haltestellenName;
     }
 
     public double getEntfernung() {
@@ -98,8 +98,8 @@ public class StopInfo {
         return productClassesString;
     }
 
-    public String getStationid() {
-        return stationid;
+    public String getStationId() {
+        return stationId;
     }
 
     public int getDepartures() {

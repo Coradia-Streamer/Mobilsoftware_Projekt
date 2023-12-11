@@ -16,18 +16,16 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.coradia.mobilsoftware_projekt.methods.CompareTime;
+import com.coradia.mobilsoftware_projekt.methods.StopInfo;
 import com.coradia.mobilsoftware_projekt.network.EfaApiClient;
 import com.coradia.mobilsoftware_projekt.objects.EfaCoordResponse;
 import com.coradia.mobilsoftware_projekt.objects.EfaDepartureMonitor;
-import com.coradia.mobilsoftware_projekt.objects.EfaStopFinderResponse;
 import com.coradia.mobilsoftware_projekt.objects.Location;
-import com.coradia.mobilsoftware_projekt.objects.LocationAssignedStops;
-import com.coradia.mobilsoftware_projekt.objects.LocationAssignedStopsProperties;
 import com.coradia.mobilsoftware_projekt.objects.LocationParent;
 import com.coradia.mobilsoftware_projekt.objects.LocationProperties;
 import com.coradia.mobilsoftware_projekt.objects.ProductClassMeaning;
@@ -45,15 +43,10 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -230,8 +223,11 @@ public class MapActivity extends AppCompatActivity {
         return "Basic " + Base64.encodeToString(authorizationString.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
     }
 
+    //Erzeugung einer Liste mit allen Informationen zu einzelnen Haltstellen
     private final List<StopInfo> stopInfoList = new ArrayList<>();
 
+
+    //Abruf aller Haltestellen in einem bestimmten Radius
     private void loadClosestStops(double latitude, double longitude) {
         Call<EfaCoordResponse> efaCall = EfaApiClient
                 .getInstance()
@@ -252,24 +248,27 @@ public class MapActivity extends AppCompatActivity {
                 Log.d("MapActivity", String.format("Response %d Locations", response.body().getLocations().size()));
                 List<Location> locations = response.body().getLocations();
 
+                //Leerung der StopInfoList bei jedem Aufruf, damit bei Standortänderung die alten Einträge gelöscht werden
                 StopInfo.leereStopInfoList(stopInfoList);
                 if (stopInfoList.isEmpty()) {
                     Log.d("MapActivity", "StopInfoListe geleert");
                 } else
                     Log.d("MapActivity", "Leerung schlug fehl!");
 
+                //Aufrufen und Abspeichern von Haltestellenname, Entfernung (in m), Stadtname, productClasses (Verkehrsmittel), StationsID und Abfahrten innerhalb eines bestimmten Intervalls für jede Haltestelle
                 for (int i = 0; i < locations.size(); i++) {
                     Location location = locations.get(i);
-                    String Haltestellen_Name = location.getName();
+                    String haltestellenName = location.getName();
 
                     LocationProperties distance = location.properties;
-                    double Entfernung = distance.getDistance();
+                    double entfernung = distance.getDistance();
 
                     LocationParent locationName = location.parent;
-                    String Stadt_Name = locationName.getName();
+                    String stadtName = locationName.getName();
 
                     int[] productClasses = location.getProductClasses();
 
+                    //Umwandlung der productClass Zahlen in tatsächliche Verkehrsmittel
                     StringBuilder productClassesString = new StringBuilder();
                     for (int classValue : productClasses) {
                         String classMeaning = ProductClassMeaning.getClassMeaning(classValue);
@@ -280,19 +279,19 @@ public class MapActivity extends AppCompatActivity {
                         productClassesString.setLength(productClassesString.length() - 2);
                     }
 
-                    int productNumber = productClasses.length;
+                    String stationId = location.getId();
+                    int departures = 0; //Die Anzahl der Abfahrten wird später separat abgefragt
 
-                    String stationid = location.getId();
-                    int departures = 0;
-
-                    StopInfo stopInfo = new StopInfo(i, Stadt_Name, Haltestellen_Name, Entfernung, productClassesString.toString(), stationid, departures);
+                    //Abspeichern aller Informationen in der StopInfoList
+                    StopInfo stopInfo = new StopInfo(i, stadtName, haltestellenName, entfernung, productClassesString.toString(), stationId, departures);
                     stopInfoList.add(stopInfo);
                 }
 
 
+                //Abfrage der Abfahrten
                 for (StopInfo daten : stopInfoList) {
-                    String stationid = daten.getStationid();
-                    requestDeparture(stationid);
+                    String stationId = daten.getStationId();
+                    requestDeparture(stationId);
                 }
 
 
@@ -309,12 +308,14 @@ public class MapActivity extends AppCompatActivity {
         });
     }
 
+    //Erzeugung einer Liste mit allen Abfahrtszeiten einer Haltestelle
     private final List<String> stopDepartureList = new ArrayList<>();
 
     private void leereStopDepartureList() {
         stopDepartureList.clear();
     }
 
+    //Abruf aller Abfahrten einer Haltestelle in einem bestimmten Intervall
     private void requestDeparture(String stationID) {
 
         Call<EfaDepartureMonitor> efaCall = EfaApiClient
@@ -328,40 +329,11 @@ public class MapActivity extends AppCompatActivity {
             public void onResponse(Call<EfaDepartureMonitor> call, Response<EfaDepartureMonitor> response) {
                 Log.d("MapActivity", String.format("Es folgen die Abfahrten der Haltestelle %s", stationID));
 
+                //Leerung der DepartureList bei jedem Aufruf, damit nur die Abfahrten einer einzigen Haltestelle gespeichert werden
                 leereStopDepartureList();
 
-
-                //Abfrage aktueller Zeit und Erstellung Vergleichszeit
-                Date currentTime = Calendar.getInstance().getTime();
-                Log.d("Time","Aktuelle Zeit: "+currentTime);
-
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.GERMANY);
-                String formattedCurrentTime = sdf.format(currentTime);
-                Log.d("Time","ISO 8601 Zeit: " + formattedCurrentTime);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currentTime);
-
-                calendar.add(Calendar.HOUR, 0);
-                calendar.add(Calendar.MINUTE,30);
-
-                Date compareTime = calendar.getTime();
-                String formattedCompareTime = sdf.format(compareTime);
-                Log.d("Time","Vergleichszeit ISO 8601:" +formattedCompareTime);
-
-                Instant instant = null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    instant = Instant.now();
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    System.out.println("Instant: " + DateTimeFormatter.ISO_INSTANT.format(instant));
-                }
-
-                //TEST!!!!!!!!!!!!!!!!!!!!
-                String target = "+0000";
-                String replacement = "Z";
-                String ZformattedCompareTime = formattedCompareTime.replace(target,replacement);
-
+                String zFormattedCompareTime = CompareTime.compareTime();
+                Log.d("ZformattedCompareTime", zFormattedCompareTime);
 
                 if (response.body().getstopEvents() == null) {
                     Log.d("MapActivity", "keine Abfahrten");
@@ -370,16 +342,17 @@ public class MapActivity extends AppCompatActivity {
                     Log.d("MapActivity", String.format("Response %d Departures", response.body().getstopEvents().size()));
                     List<StopEvents> stopEvents = response.body().getstopEvents();
 
+                    //Abruf und Abspeichern aller Abfahrten an einer Haltestelle
                     for (int i = 0; i < stopEvents.size(); i++) {
                         StopEvents stopEvent = stopEvents.get(i);
-                        String DepartureTimePlanned = stopEvent.getDepartureTimePlanned();
+                        String departureTimePlanned = stopEvent.getDepartureTimePlanned();
 
-                        Instant instantCompare = Instant.parse(ZformattedCompareTime);
-                        Instant instantDeparture = Instant.parse(DepartureTimePlanned);
+                        Instant instantCompare = Instant.parse(zFormattedCompareTime);
+                        Instant instantDeparture = Instant.parse(departureTimePlanned);
 
-                        if (instantCompare.isAfter(instantDeparture)){
-                            Log.d("MapActivity", String.format("Die Abfahrt ist um %s und somit vor %s", DepartureTimePlanned, ZformattedCompareTime));
-                            stopDepartureList.add(DepartureTimePlanned);
+                        if (instantCompare.isAfter(instantDeparture)) {
+                            Log.d("MapActivity", String.format("Die Abfahrt ist um %s und somit vor %s", departureTimePlanned, zFormattedCompareTime));
+                            stopDepartureList.add(departureTimePlanned);
                         }
 
                         //Log.d("MapActivity", String.format("Die Abfahrt ist um %s", DepartureTimePlanned));
@@ -387,17 +360,19 @@ public class MapActivity extends AppCompatActivity {
                     }
                 }
 
-                for(StopInfo stopInfo : stopInfoList) {
-                    if(stopInfo.getStationid() != null){
-                        if(stopInfo.getStationid().equals(stationID)){
+                //Abspeichern der ANZAHL aller Abfahrten an einer Haltestelle in die StopInfoList zur passenden Haltestelle
+                for (StopInfo stopInfo : stopInfoList) {
+                    if (stopInfo.getStationId() != null) {
+                        if (stopInfo.getStationId().equals(stationID)) {
                             int departures = stopDepartureList.size();
                             Log.d("MapActivity", String.format("Die Haltestelle %s hat %s Abfahrten", stationID, departures));
                             stopInfo.setDepartures(departures);
 
+                            //Loggen der kompletten StopInfoList nachdem allen Haltestellen die Anzahl der Abfahrten hinzugefügt worden sind
                             int lastindex = stopInfoList.size() - 1;
                             StopInfo stopInfo1 = stopInfoList.get(lastindex);
-                            Log.d("MapActivity","Letzte Station ID: " + stopInfo1.getStationid());
-                            if (stopInfo1.getStationid() == stationID) {
+                            Log.d("MapActivity", "Letzte Station ID: " + stopInfo1.getStationId());
+                            if (stopInfo1.getStationId() == stationID) {
                                 StopInfo.loggeStopInfoListe(stopInfoList);
                             }
 
