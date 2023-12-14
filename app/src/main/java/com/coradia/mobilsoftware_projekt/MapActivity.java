@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.coradia.mobilsoftware_projekt.methods.Calculater;
 import com.coradia.mobilsoftware_projekt.methods.CompareTime;
 import com.coradia.mobilsoftware_projekt.methods.StopInfo;
 import com.coradia.mobilsoftware_projekt.network.EfaApiClient;
@@ -283,7 +284,7 @@ public class MapActivity extends AppCompatActivity {
                     int departures = 0; //Die Anzahl der Abfahrten wird später separat abgefragt
 
                     //Abspeichern aller Informationen in der StopInfoList
-                    StopInfo stopInfo = new StopInfo(i, stadtName, haltestellenName, entfernung, productClassesString.toString(), stationId, departures);
+                    StopInfo stopInfo = new StopInfo(i, stadtName, haltestellenName, entfernung, productClassesString.toString(), stationId, departures, productClasses);
                     stopInfoList.add(stopInfo);
                 }
 
@@ -296,6 +297,11 @@ public class MapActivity extends AppCompatActivity {
 
 
                 StopInfo.loggeStopInfoListe(stopInfoList);
+
+
+                /*Calculater calculater = new Calculater();
+
+                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList)));*/
 
 
             }
@@ -373,7 +379,11 @@ public class MapActivity extends AppCompatActivity {
                             StopInfo stopInfo1 = stopInfoList.get(lastindex);
                             Log.d("MapActivity", "Letzte Station ID: " + stopInfo1.getStationId());
                             if (stopInfo1.getStationId() == stationID) {
+
                                 StopInfo.loggeStopInfoListe(stopInfoList);
+
+                                Calculater calculater = new Calculater();
+                                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList)));;
                             }
 
                         }

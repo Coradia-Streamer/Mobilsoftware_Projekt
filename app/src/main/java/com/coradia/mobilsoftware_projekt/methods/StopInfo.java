@@ -16,8 +16,10 @@ public class StopInfo {
 
     private int departures;
 
+    private int[] productClasses;
 
-    public StopInfo(int index, String stadtName, String haltestellenName, double entfernung, String productClassesString, String stationId, int departures) {
+
+    public StopInfo(int index, String stadtName, String haltestellenName, double entfernung, String productClassesString, String stationId, int departures, int[] productClasses) {
         this.index = index;
         this.stadtName = stadtName;
         this.haltestellenName = haltestellenName;
@@ -25,6 +27,7 @@ public class StopInfo {
         this.productClassesString = productClassesString;
         this.stationId = stationId;
         this.departures = departures;
+        this.productClasses = productClasses;
     }
 
     public static void loggeStopInfoListe(List<StopInfo> stopInfoList) {
@@ -47,7 +50,6 @@ public class StopInfo {
     public static void leereStopInfoList(List<StopInfo> stopInfoList) {
         stopInfoList.clear();
     }
-
 
 
     public void setIndex(int index) {
@@ -104,6 +106,10 @@ public class StopInfo {
 
     public int getDepartures() {
         return departures;
+    }
+
+    public int[] getProductClasses() {
+        return productClasses;
     }
 
 
