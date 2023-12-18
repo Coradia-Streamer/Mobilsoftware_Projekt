@@ -43,10 +43,26 @@ public class CompareTime {
                 }*/
 
         //Anpassung der ISO 8601 formattierten Vergleichszeit (Ersetzung von +0000 durch Z, notwendig damit .parse(...) funktioniert)
-        String target = "+0000";
-        String replacement = "Z";
-        String ZformattedCompareTime = formattedCompareTime.replace(target,replacement);
 
+        //Virtual
+        String ZformattedCompareTime = null;
+        if (formattedCompareTime.contains("+0000")) {
+            String target = "+0000";
+            String replacement = "Z";
+            ZformattedCompareTime = formattedCompareTime.replace(target,replacement);
+
+
+            //Physical
+        } else if (formattedCompareTime.contains("+0100")) {
+            String target = "+0100";
+            String replacement = "Z";
+            ZformattedCompareTime = formattedCompareTime.replace(target,replacement);
+
+
+        }
+
+
+        
         return ZformattedCompareTime;
     }
 }

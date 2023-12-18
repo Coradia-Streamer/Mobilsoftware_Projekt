@@ -230,6 +230,7 @@ public class MapActivity extends AppCompatActivity {
 
     //Abruf aller Haltestellen in einem bestimmten Radius
     private void loadClosestStops(double latitude, double longitude) {
+        textView.setText("Lade Haltestellen");
         Call<EfaCoordResponse> efaCall = EfaApiClient
                 .getInstance()
                 .getClient()
@@ -324,6 +325,7 @@ public class MapActivity extends AppCompatActivity {
     //Abruf aller Abfahrten einer Haltestelle in einem bestimmten Intervall
     private void requestDeparture(String stationID) {
 
+        textView.setText("Lade Abfahrten");
         Call<EfaDepartureMonitor> efaCall = EfaApiClient
                 .getInstance()
                 .getClient()
