@@ -22,8 +22,14 @@ import androidx.core.app.ActivityCompat;
 
 import com.coradia.mobilsoftware_projekt.methods.Calculater;
 import com.coradia.mobilsoftware_projekt.methods.CompareTime;
+import com.coradia.mobilsoftware_projekt.methods.NextbikeInfo;
 import com.coradia.mobilsoftware_projekt.methods.StopInfo;
 import com.coradia.mobilsoftware_projekt.network.EfaApiClient;
+import com.coradia.mobilsoftware_projekt.network.NextbikeApiClient;
+import com.coradia.mobilsoftware_projekt.nextbike.Cities;
+import com.coradia.mobilsoftware_projekt.nextbike.Countries;
+import com.coradia.mobilsoftware_projekt.nextbike.NextbikeResponse;
+import com.coradia.mobilsoftware_projekt.nextbike.Places;
 import com.coradia.mobilsoftware_projekt.objects.EfaCoordResponse;
 import com.coradia.mobilsoftware_projekt.objects.EfaDepartureMonitor;
 import com.coradia.mobilsoftware_projekt.objects.Location;
@@ -66,7 +72,8 @@ public class MapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        XYTileSource mapServer = new XYTileSource("MapServer",
+        XYTileSource mapServer = new XYTileSource(
+                "MapName",
                 8,
                 20,
                 256,
@@ -224,8 +231,9 @@ public class MapActivity extends AppCompatActivity {
         return "Basic " + Base64.encodeToString(authorizationString.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
     }
 
-    //Erzeugung einer Liste mit allen Informationen zu einzelnen Haltstellen
+    //Erzeugung einer Liste mit allen Informationen zu einzelnen Haltstellen und zu den Nextbikes
     private final List<StopInfo> stopInfoList = new ArrayList<>();
+    private final List<NextbikeInfo> nextbikeInfoList = new ArrayList<>();
 
 
     //Abruf aller Haltestellen in einem bestimmten Radius
@@ -255,7 +263,7 @@ public class MapActivity extends AppCompatActivity {
                 if (stopInfoList.isEmpty()) {
                     Log.d("MapActivity", "StopInfoListe geleert");
                 } else
-                    Log.d("MapActivity", "Leerung schlug fehl!");
+                    Log.d("MapActivity", "StopInfoListe: Leerung schlug fehl!");
 
                 //Aufrufen und Abspeichern von Haltestellenname, Entfernung (in m), Stadtname, productClasses (Verkehrsmittel), StationsID und Abfahrten innerhalb eines bestimmten Intervalls für jede Haltestelle
                 for (int i = 0; i < locations.size(); i++) {
@@ -298,6 +306,8 @@ public class MapActivity extends AppCompatActivity {
 
 
                 StopInfo.loggeStopInfoListe(stopInfoList);
+
+                loadNextbikeApi(mapView.getMapCenter().getLatitude(), mapView.getMapCenter().getLongitude());
 
 
                 /*Calculater calculater = new Calculater();
@@ -385,7 +395,7 @@ public class MapActivity extends AppCompatActivity {
                                 StopInfo.loggeStopInfoListe(stopInfoList);
 
                                 Calculater calculater = new Calculater();
-                                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList)));;
+                                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList, nextbikeInfoList)));;
                             }
 
                         }
@@ -401,6 +411,92 @@ public class MapActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+    //Abruf NextbikeAPI
+    private void loadNextbikeApi(double latitude, double longitude) {
+        textView.setText("Lade Nextbike Station");
+        Call<NextbikeResponse> nextbikeResponseCall = NextbikeApiClient
+                .getInstance()
+                .getClient()
+                .loadBikesWithinRadius(
+                        NextbikeApiClient
+                                .getInstance()
+                                .createLatitude(latitude), longitude
+                );
+
+        nextbikeResponseCall.enqueue(new Callback<NextbikeResponse>() {
+
+
+
+            @Override
+            public void onResponse(Call<NextbikeResponse> call, Response<NextbikeResponse> response) {
+                Log.d("Nextbikes", String.format("Response %d", response.body().getCountriesList().size()));
+                List<Countries> countries = response.body().getCountriesList();
+
+
+                //Leerung der StopInfoList bei jedem Aufruf, damit bei Standortänderung die alten Einträge gelöscht werden
+                NextbikeInfo.leereNextbikeInfoList(nextbikeInfoList);
+                if (nextbikeInfoList.isEmpty()) {
+                    Log.d("MapActivity", "NextbikeInfoListe geleert");
+                } else
+                    Log.d("MapActivity", "NextbikeInfoListe: Leerung schlug fehl!");
+
+
+                //Aufrufen und Abspeichern von Haltestellenname, Entfernung (in m), Stadtname, productClasses (Verkehrsmittel), StationsID und Abfahrten innerhalb eines bestimmten Intervalls für jede Haltestelle
+                for (int i = 0; i < countries.size(); i++) {
+                    Countries country = countries.get(i);
+
+                    List<Cities> citiesList = country.getCitiesList();
+
+                    for (int j = 0; j < citiesList.size(); j++) {
+                        Cities city = citiesList.get(j);
+
+                        List<Places> placesList = city.getPlacesList();
+
+                        for (int k = 0; k < placesList.size(); k++) {
+                            Places places = placesList.get(k);
+
+                            boolean bike = places.isBike();
+                            String name = places.getNameNextbike();
+                            boolean spot = places.isSpot();
+                            int bikes = places.getBikes();
+                            double distance = places.getDist();
+
+                            //Abspeichern aller Informationen in der NextbikeInfoListe
+                            NextbikeInfo nextbikeInfo = new NextbikeInfo(k, name, bike, spot, bikes, distance);
+                            nextbikeInfoList.add(nextbikeInfo);
+
+
+                            //Log.d("Nextbike", name + ", Fahrrad? -> " + bike + ", Spot? -> " + spot + ", Anzahl Fahrräder: " + bikes + ", Abstand: " + distance);
+                        }
+
+                    }
+                }
+
+                NextbikeInfo.loggeNextbikeInfoListe(nextbikeInfoList);
+
+                /*Calculater calculater = new Calculater();
+                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList, nextbikeInfoList)));;*/
+
+                /*Calculater calculater = new Calculater();
+                double bikegrade = calculater.getGradeBikeComplete(nextbikeInfoList);
+                Log.d("Nextbike","Fahrradnote: " + bikegrade);*/
+
+
+            }
+
+
+
+
+            @Override
+            public void onFailure(Call<NextbikeResponse> call, Throwable t) {
+                Log.e("Nextbike", "NextbikeAPI fehlgeschlagen");
+            }
+        });
+    }
+
 
 
 }

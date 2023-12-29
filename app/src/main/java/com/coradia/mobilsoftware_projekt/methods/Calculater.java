@@ -1,5 +1,7 @@
 package com.coradia.mobilsoftware_projekt.methods;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +16,15 @@ public class Calculater {
 
     double gradeStopModules;
 
+    double gradeBikeAmount;
+
+    double gradeBikeStationAmount;
+
+    double gradeBikeDistance;
+
     double finalGrade;
 
+    //Notenrechner ÖPNV:
     //Notenrechner Haltestellendichte
     public double getGradeStopAmount(int stopAmount) {
 
@@ -27,14 +36,14 @@ public class Calculater {
             stopamountnew = stopAmount;
         }
 
-        double grade = 6 - 5 * stopamountnew / 20;
+        double grade = 6 - 5.0 * stopamountnew / 20;
         return grade;
     }
 
     //Notenrechner Haltestellenabstand
     public double getGradeStopDistance(double stopDistance) {
 
-        double grade = 1 / 150 * stopDistance - 2 / 3;
+        double grade = 1.0 / 150 * stopDistance - 2.0 / 3;
 
         if (grade < 1) {
             grade = 1;
@@ -51,7 +60,7 @@ public class Calculater {
     public double getGradeStopDeparture(double stopDeparture) {
 
         //WICHTIG: ANZAHL DER HALTESTELLEN AUF MITTELWERT VORHER BRINGEN!!!!!!!!!
-        double grade = 6 - 5 * (stopDeparture) / (12);
+        double grade = 6 - 5.0 * (stopDeparture) / (12);
 
         if (grade < 1) {
             grade = 1;
@@ -93,7 +102,7 @@ public class Calculater {
 
         int punkte = bahn + schiene + strasse + ondemand;
 
-        double grade = 6 - 5 * (punkte) / (12);
+        double grade = 6 - 5.0 * (punkte) / (12);
 
         if (grade < 1) {
             grade = 1;
@@ -104,7 +113,72 @@ public class Calculater {
 
     }
 
-    public double getFinalGrade(List<StopInfo> stopInfoList) {
+    //Notenrechner Nextbikes:
+    //Notenrechner Anzahl Fahrräder
+    public double getGradeBikeAmount(int bikeAmount) {
+
+        double grade = 6 - 5.0 * bikeAmount / 125;
+
+        if (grade < 1) {
+            grade = 1;
+        } else if (grade > 6) {
+            grade = 6;
+
+        }
+
+        return grade;
+    }
+
+
+    //Notenrechner Anzahl Station
+    public double getGradeBikeStationAmount(int stationAmount) {
+
+        double grade = 6 - 5.0 * stationAmount / 7;
+
+        if (grade < 1) {
+            grade = 1;
+        } else if (grade > 6) {
+            grade = 6;
+
+        }
+
+        return grade;
+    }
+
+    //Notenrechner Abstand Fahrrad/Station
+    public double getGradeBikeDistance(double bikeDistance) {
+
+        double grade = 1.0/190 * bikeDistance + 14.0/19;
+
+        if (grade < 1) {
+            grade = 1;
+        } else if (grade > 6) {
+            grade = 6;
+
+        }
+
+        return grade;
+    }
+
+    public double getGradeBikeComplete(List<NextbikeInfo> nextbikeInfoList) {
+
+        int bikeAmount = NextbikeInfo.getTotalBikeCount(nextbikeInfoList);
+        int bikeStationAmount = NextbikeInfo.getTotalStationCount(nextbikeInfoList);
+        double bikeDistance = nextbikeInfoList.get(0).getDist();
+
+        double bikegrade = (getGradeBikeAmount(bikeAmount) + getGradeBikeStationAmount(bikeStationAmount) + getGradeBikeDistance(bikeDistance)) / 3;
+
+        double bikegrade1 = getGradeBikeAmount(bikeAmount);
+        double bikegrade2 = getGradeBikeStationAmount(bikeStationAmount);
+        double bikegrade3 = getGradeBikeDistance(bikeDistance);
+
+        return bikegrade;
+    }
+
+
+
+
+    public double getFinalGrade(List<StopInfo> stopInfoList, List<NextbikeInfo> nextbikeInfoList) {
 
         int stopAmount = stopInfoList.size();
         double stopDistance = stopInfoList.get(0).getEntfernung();
@@ -131,12 +205,25 @@ public class Calculater {
 
         }
 
-        double grade = (getGradeStopAmount(stopAmount) + getGradeStopDistance(stopDistance) + getGradeStopDeparture(stopDeparture) + getGradeStopModules(productClasses)) / 4;
+
+        double putGrade = (getGradeStopAmount(stopAmount) + getGradeStopDistance(stopDistance) + getGradeStopDeparture(stopDeparture) + getGradeStopModules(productClasses)) / 4;
+
+        int bikeAmount = NextbikeInfo.getTotalBikeCount(nextbikeInfoList);
+        int bikeStationAmount = NextbikeInfo.getTotalStationCount(nextbikeInfoList);
+        double bikeDistance = nextbikeInfoList.get(0).getDist();
+
+        double bikegrade = (getGradeBikeAmount(bikeAmount) + getGradeBikeStationAmount(bikeStationAmount) + getGradeBikeDistance(bikeDistance)) / 3;
+
+        double bikegrade1 = getGradeBikeAmount(bikeAmount);
+        double bikegrade2 = getGradeBikeStationAmount(bikeStationAmount);
+        double bikegrade3 = getGradeBikeDistance(bikeDistance);
 
         double grade1 = getGradeStopAmount(stopAmount);
         double grade2 = getGradeStopDistance(stopDistance);
         double grade3 = getGradeStopDeparture(stopDeparture);
         double grade4 = getGradeStopModules(productClasses);
+
+        double grade = (putGrade + bikegrade) / 2;
 
         grade = Math.round(grade * 4) / 4f;
 
