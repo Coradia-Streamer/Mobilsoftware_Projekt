@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/HKADescription2"
+        android:layout_width="352dp"
+        android:layout_height="54dp"
+
+        android:layout_marginBottom="372dp"
+        android:background="#F9F9F7"
+        android:padding="20sp"
+        android:text="Ein Projekt der Hochschule Karlsruhe"
+        android:textAlignment="viewStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/mainDescription"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/mainDescription"
+        app:layout_constraintTop_toBottomOf="@+id/mainDescription" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -15,14 +33,102 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/hka_logo" />
 
-    <Button
-        android:id="@+id/mapButton"
+    <ImageView
+        android:id="@+id/imagebwegt"
+        android:layout_width="180dp"
+        android:layout_height="131dp"
+        android:layout_marginTop="368dp"
+        android:contentDescription="bwegt_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.913"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bwegt_logo" />
+
+    <ImageView
+        android:id="@+id/imagenextbike"
+        android:layout_width="180dp"
+        android:layout_height="131dp"
+        android:layout_marginTop="368dp"
+        android:contentDescription="kvvnextbike_logo"
+        app:layout_constraintEnd_toStartOf="@+id/imagebwegt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/nextbikekvv_logo" />
+
+    <TextView
+        android:id="@+id/mainTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="124dp"
+        android:layout_marginBottom="628dp"
+        android:background="#F9F9F7"
+        android:padding="20sp"
+        android:text="Mobility Score Rechner"
+        android:textStyle="bold"
+        android:textAlignment="viewStart"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="+id/imageView"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/mainDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="436dp"
+        android:background="#F9F9F7"
+        android:padding="20sp"
+        android:text="Benoten Sie die Qualität ihrer Mobilität anhand der ÖPNV Erschließung und der Verfügbarkeit von Nextbike Mieträdern in ihrer aktuellen Nähe"
+        android:textAlignment="viewStart"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/mainnextbikelinkDescription"
+        android:layout_width="178dp"
+        android:layout_height="50dp"
+
+        android:layout_marginBottom="228dp"
+        android:background="#F9F9F7"
+        android:padding="10sp"
+        android:text="https://www.kvv-nextbike.de/de/"
+        android:textAlignment="viewStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imagenextbike"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/imagenextbike" />
+
+    <TextView
+        android:id="@+id/bwegtlinkDescription"
+        android:layout_width="182dp"
+        android:layout_height="46dp"
+
+        android:background="#F9F9F7"
+        android:padding="15sp"
+        android:text="https://www.bwegt.de/"
+        android:textAlignment="viewStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imagebwegt"
+        app:layout_constraintEnd_toEndOf="@+id/imagebwegt"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/imagebwegt" />
+
+    <Button
+        android:id="@+id/mapButton"
+        android:layout_width="371dp"
+        android:layout_height="40dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="181dp"
-        android:text="@string/mapButton"
+        android:background="@color/Alarmred"
+        android:text="START"
+        android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
