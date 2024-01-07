@@ -65,11 +65,10 @@
         android:background="#F9F9F7"
         android:padding="20sp"
         android:text="Mobility Score Rechner"
-        android:textStyle="bold"
         android:textAlignment="viewStart"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="+id/imageView"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
