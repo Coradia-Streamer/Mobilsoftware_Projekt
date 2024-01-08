@@ -30,8 +30,9 @@
 
     <org.osmdroid.views.MapView
         android:id="@+id/testMap"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:backgroundTintMode="src_over"
         app:layout_constraintBottom_toTopOf="@+id/mobscore"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
