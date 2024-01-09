@@ -94,7 +94,7 @@ public class MapActivity extends AppCompatActivity {
         mapView.setTileSource(mapServer);
         // GeoPoint startPoint = new GeoPoint(49.0069, 8.4037);
         IMapController mapController = mapView.getController();
-        mapController.setZoom(14.0);
+        mapController.setZoom(17.0);
         // mapController.setCenter(startPoint);
 
         ProgressBar progressBar = findViewById(R.id.progressBar);
@@ -416,7 +416,7 @@ public class MapActivity extends AppCompatActivity {
 
     //Abruf NextbikeAPI
     private void loadNextbikeApi(double latitude, double longitude) {
-        textView.setText("Lade Nextbike Station");
+        textView.setText("Lade Nextbike Stationen");
         Call<NextbikeResponse> nextbikeResponseCall = NextbikeApiClient
                 .getInstance()
                 .getClient()
