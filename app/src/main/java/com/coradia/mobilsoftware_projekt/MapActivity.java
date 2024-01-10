@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -16,7 +15,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -165,7 +164,7 @@ public class MapActivity extends AppCompatActivity {
 
         efaCall.enqueue(new Callback<EfaCoordResponse>() {
             @Override
-            public void onResponse(Call<EfaCoordResponse> call, Response<EfaCoordResponse> response) {
+            public void onResponse(@NonNull Call<EfaCoordResponse> call, @NonNull Response<EfaCoordResponse> response) {
                 Log.d("MapActivity", String.format("Response %d Locations", Objects.requireNonNull(response.body()).getLocations().size()));
                 String[] locations = new String[response.body().getLocations().size()];
                 for (int i = 0; i < response.body().getLocations().size(); i++) {
@@ -184,7 +183,7 @@ public class MapActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<EfaCoordResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<EfaCoordResponse> call, @NonNull Throwable t) {
                 Log.e("MapActivity", "Failure");
             }
         });
@@ -254,8 +253,8 @@ public class MapActivity extends AppCompatActivity {
 
         efaCall.enqueue(new Callback<EfaCoordResponse>() {
             @Override
-            public void onResponse(Call<EfaCoordResponse> call, Response<EfaCoordResponse> response) {
-                Log.d("MapActivity", String.format("Response %d Locations", response.body().getLocations().size()));
+            public void onResponse(@NonNull Call<EfaCoordResponse> call, @NonNull Response<EfaCoordResponse> response) {
+                Log.d("MapActivity", String.format("Response %d Locations", Objects.requireNonNull(response.body()).getLocations().size()));
                 List<Location> locations = response.body().getLocations();
 
                 //Leerung der StopInfoList bei jedem Aufruf, damit bei Standortänderung die alten Einträge gelöscht werden
@@ -319,7 +318,7 @@ public class MapActivity extends AppCompatActivity {
 
 
             @Override
-            public void onFailure(Call<EfaCoordResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<EfaCoordResponse> call, @NonNull Throwable t) {
                 Log.e("MapActivity", "Failure");
             }
         });
@@ -342,9 +341,8 @@ public class MapActivity extends AppCompatActivity {
                 .requestDeparture(stationID);
 
         efaCall.enqueue(new Callback<EfaDepartureMonitor>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void onResponse(Call<EfaDepartureMonitor> call, Response<EfaDepartureMonitor> response) {
+            public void onResponse(@NonNull Call<EfaDepartureMonitor> call, @NonNull Response<EfaDepartureMonitor> response) {
                 Log.d("MapActivity", String.format("Es folgen die Abfahrten der Haltestelle %s", stationID));
 
                 //Leerung der DepartureList bei jedem Aufruf, damit nur die Abfahrten einer einzigen Haltestelle gespeichert werden
@@ -353,7 +351,7 @@ public class MapActivity extends AppCompatActivity {
                 String zFormattedCompareTime = CompareTime.compareTime();
                 Log.d("ZformattedCompareTime", zFormattedCompareTime);
 
-                if (response.body().getstopEvents() == null) {
+                if (Objects.requireNonNull(response.body()).getstopEvents() == null) {
                     Log.d("MapActivity", "keine Abfahrten");
                 } else {
 
@@ -390,12 +388,12 @@ public class MapActivity extends AppCompatActivity {
                             int lastindex = stopInfoList.size() - 1;
                             StopInfo stopInfo1 = stopInfoList.get(lastindex);
                             Log.d("MapActivity", "Letzte Station ID: " + stopInfo1.getStationId());
-                            if (stopInfo1.getStationId() == stationID) {
+                            if (Objects.equals(stopInfo1.getStationId(), stationID)) {
 
                                 StopInfo.loggeStopInfoListe(stopInfoList);
 
                                 Calculater calculater = new Calculater();
-                                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList, nextbikeInfoList)));;
+                                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList, nextbikeInfoList)));
                             }
 
                         }
@@ -406,7 +404,7 @@ public class MapActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<EfaDepartureMonitor> call, Throwable t) {
+            public void onFailure(@NonNull Call<EfaDepartureMonitor> call, @NonNull Throwable t) {
                 Log.e("MapActivity", "Fehler beim Aufrufen der API", t);
             }
         });
@@ -431,8 +429,8 @@ public class MapActivity extends AppCompatActivity {
 
 
             @Override
-            public void onResponse(Call<NextbikeResponse> call, Response<NextbikeResponse> response) {
-                Log.d("Nextbikes", String.format("Response %d", response.body().getCountriesList().size()));
+            public void onResponse(@NonNull Call<NextbikeResponse> call, @NonNull Response<NextbikeResponse> response) {
+                Log.d("Nextbikes", String.format("Response %d", Objects.requireNonNull(response.body()).getCountriesList().size()));
                 List<Countries> countries = response.body().getCountriesList();
 
 
@@ -491,7 +489,7 @@ public class MapActivity extends AppCompatActivity {
 
 
             @Override
-            public void onFailure(Call<NextbikeResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<NextbikeResponse> call, @NonNull Throwable t) {
                 Log.e("Nextbike", "NextbikeAPI fehlgeschlagen");
             }
         });
