@@ -1,11 +1,8 @@
 package com.coradia.mobilsoftware_projekt.methods;
 
-import android.util.Log;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class Calculater {
+public class Calculator {
 
 
     double gradeStopAmount;
@@ -210,7 +207,13 @@ public class Calculater {
 
         int bikeAmount = NextbikeInfo.getTotalBikeCount(nextbikeInfoList);
         int bikeStationAmount = NextbikeInfo.getTotalStationCount(nextbikeInfoList);
-        double bikeDistance = nextbikeInfoList.get(0).getDist();
+
+        double bikeDistance;
+        if (nextbikeInfoList.size() != 0) {
+            bikeDistance = nextbikeInfoList.get(0).getDist();
+        } else {
+            bikeDistance = Double.MAX_VALUE;
+        }
 
         double bikegrade = (getGradeBikeAmount(bikeAmount) + getGradeBikeStationAmount(bikeStationAmount) + getGradeBikeDistance(bikeDistance)) / 3;
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Uebung02_Java</string>
+    <string name="app_name">bwScore</string>
     <string name="hello_world">Hello World!</string>
     <string name="mapButton">KARTE</string>
     <string name="mobscore">Mobility-Score:</string>

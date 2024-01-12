@@ -5,21 +5,25 @@ import static java.lang.Boolean.TRUE;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
-import com.coradia.mobilsoftware_projekt.methods.Calculater;
+import com.coradia.mobilsoftware_projekt.methods.Calculator;
 import com.coradia.mobilsoftware_projekt.methods.CompareTime;
 import com.coradia.mobilsoftware_projekt.methods.NextbikeInfo;
 import com.coradia.mobilsoftware_projekt.methods.StopInfo;
@@ -65,11 +69,28 @@ public class MapActivity extends AppCompatActivity {
     private TextView textView;
     Boolean toggleProgress = FALSE;
     Boolean togglePermission = FALSE;
+    boolean toggleFirst = FALSE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        Toolbar toolbar = findViewById(R.id.appbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
+        Button mainButton = findViewById(R.id.main_button);
+        Button mapButton = findViewById(R.id.map_button);
+        Button prefsButton = findViewById(R.id.prefs_button);
+
+        mapButton.setBackgroundColor(getColor(R.color.Alarmred));
+
+        mainButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MapActivity.this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+        });
 
         XYTileSource mapServer = new XYTileSource(
                 "MapName",
@@ -131,8 +152,11 @@ public class MapActivity extends AppCompatActivity {
         this.mapView.addMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
-                movement();
-                toggleProgress = TRUE;
+                if(!toggleFirst) {
+                    movement();
+                    toggleProgress = TRUE;
+                    toggleFirst = TRUE;
+                }
                 return false;
             }
 
@@ -142,6 +166,75 @@ public class MapActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    Handler handler = new Handler();
+    Runnable runnable;
+    int delay = 2*1000;
+    double savedDistance = 0;
+    boolean toggleInstance = FALSE;
+    boolean toggleMove = FALSE;
+    boolean toggleNoneMove = FALSE;
+    GeoPoint reference;
+    GeoPoint actual;
+
+
+    @Override
+    protected void onResume() {
+        handler.postDelayed(runnable = () -> {
+            if (toggleFirst) {
+                if (!toggleInstance) {
+                    reference = new GeoPoint(mapView.getMapCenter());
+                    Log.d("Runnable", "First execution of the distance calculator");
+                    toggleInstance = TRUE;
+                } else {
+                    actual = new GeoPoint(mapView.getMapCenter());
+                    double distance = distance(reference, actual);
+                    distance = (double) Math.round(distance * 1000) / 1000;
+                    savedDistance = savedDistance + distance;
+                    Log.d("Runnable", "The distance is " + distance + " and the saved distance is " + savedDistance);
+                    if (savedDistance > 0.5) {
+                        toggleMove = TRUE;
+                        toggleNoneMove = FALSE;
+                        delay = 1000;
+                    }
+                    if (distance == 0) {
+                        toggleNoneMove = TRUE;
+                        delay = 2*1000;
+                    }
+                    reference = actual;
+                }
+                if (toggleMove && toggleNoneMove) {
+                    toggleMove = FALSE;
+                    savedDistance = 0;
+                    movement();
+                }
+                //Log.d("Runnable", "I'm doing something");
+            }
+            handler.postDelayed(runnable, delay);
+        }, delay);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        handler.removeCallbacks(runnable);
+        super.onPause();
+    }
+
+    private Double distance(GeoPoint reference, GeoPoint actual) {
+        double distance;
+        Double dx;
+        Double dy;
+        double lat;
+
+        lat = (reference.getLatitude() + actual.getLatitude()) / 2 * 0.01745;
+        dx = 111.3 * Math.cos(lat) * (reference.getLongitude() - actual.getLongitude());
+        dy = 111.3 * (reference.getLatitude() - actual.getLatitude());
+
+        distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance;
     }
 
     private void movement() {
@@ -392,8 +485,8 @@ public class MapActivity extends AppCompatActivity {
 
                                 StopInfo.loggeStopInfoListe(stopInfoList);
 
-                                Calculater calculater = new Calculater();
-                                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList, nextbikeInfoList)));
+                                Calculator calculator = new Calculator();
+                                textView.setText(String.valueOf(calculator.getFinalGrade(stopInfoList, nextbikeInfoList)));
                             }
 
                         }
