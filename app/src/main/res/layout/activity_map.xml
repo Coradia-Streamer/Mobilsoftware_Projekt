@@ -102,7 +102,7 @@
             android:padding="5sp"
             android:text="Dein aktueller Mobility-Score ist:"
             android:textAlignment="center"
-            android:textColor="#474040"
+            android:textColor="@color/black"
             android:textSize="24sp" />
 
         <TextView
