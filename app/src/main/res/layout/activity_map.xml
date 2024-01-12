@@ -98,11 +98,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/Alarmred"
+            android:background="?attr/colorPrimary"
             android:padding="5sp"
             android:text="Dein aktueller Mobility-Score ist:"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="24sp" />
 
         <TextView

@@ -55,7 +55,6 @@ import org.osmdroid.views.MapView;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,12 +81,18 @@ public class MapActivity extends AppCompatActivity {
 
         Button mainButton = findViewById(R.id.main_button);
         Button mapButton = findViewById(R.id.map_button);
-        Button prefsButton = findViewById(R.id.prefs_button);
+        Button detailsButton = findViewById(R.id.details_button);
 
         mapButton.setBackgroundColor(getColor(R.color.Alarmred));
 
         mainButton.setOnClickListener(view -> {
             Intent intent = new Intent(MapActivity.this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+        });
+
+        detailsButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MapActivity.this,DetailActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
@@ -168,6 +173,7 @@ public class MapActivity extends AppCompatActivity {
         });
     }
 
+
     Handler handler = new Handler();
     Runnable runnable;
     int delay = 2*1000;
@@ -177,7 +183,6 @@ public class MapActivity extends AppCompatActivity {
     boolean toggleNoneMove = FALSE;
     GeoPoint reference;
     GeoPoint actual;
-
 
     @Override
     protected void onResume() {
@@ -237,50 +242,6 @@ public class MapActivity extends AppCompatActivity {
         return distance;
     }
 
-    private void movement() {
-        loadClosestStops(mapView.getMapCenter().getLatitude(), mapView.getMapCenter().getLongitude());
-    }
-
-    private void loadClosestStops(Double latitude, Double longitude) {
-        Call<EfaCoordResponse> efaCall = EfaApiClient
-                .getInstance()
-                .getClient()
-                .loadStopsWithinRadius(
-                        EfaApiClient
-                                .getInstance()
-                                .createCoordinateString(
-                                        latitude,
-                                        longitude
-                                ),
-                        400
-                );
-
-        efaCall.enqueue(new Callback<EfaCoordResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<EfaCoordResponse> call, @NonNull Response<EfaCoordResponse> response) {
-                Log.d("MapActivity", String.format("Response %d Locations", Objects.requireNonNull(response.body()).getLocations().size()));
-                String[] locations = new String[response.body().getLocations().size()];
-                for (int i = 0; i < response.body().getLocations().size(); i++) {
-                    locations[i] = response.body().getLocations().get(i).name;
-                }
-                String locationNames = Arrays.toString(locations);
-                Log.d("MapActivity", locationNames);
-                int size = response.body().getLocations().size();
-                if (size == 0) {
-                    textView.setText(R.string.bad);
-                } else if (size == 1) {
-                    textView.setText(R.string.acceptable);
-                } else if (size == 2 || size == 3) {
-                    textView.setText(R.string.good);
-                } else textView.setText(R.string.extraordinary);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<EfaCoordResponse> call, @NonNull Throwable t) {
-                Log.e("MapActivity", "Failure");
-            }
-        });
-    }
 
     public void initialiseLocation() {
         LocationListener locationListener = location -> {
@@ -327,6 +288,12 @@ public class MapActivity extends AppCompatActivity {
     private final List<StopInfo> stopInfoList = new ArrayList<>();
     private final List<NextbikeInfo> nextbikeInfoList = new ArrayList<>();
 
+    //Erzeugung einer Liste mit allen Abfahrtszeiten einer Haltestelle
+    private final List<String> stopDepartureList = new ArrayList<>();
+
+    private void movement() {
+        loadClosestStops(mapView.getMapCenter().getLatitude(), mapView.getMapCenter().getLongitude());
+    }
 
     //Abruf aller Haltestellen in einem bestimmten Radius
     private void loadClosestStops(double latitude, double longitude) {
@@ -417,9 +384,6 @@ public class MapActivity extends AppCompatActivity {
         });
     }
 
-    //Erzeugung einer Liste mit allen Abfahrtszeiten einer Haltestelle
-    private final List<String> stopDepartureList = new ArrayList<>();
-
     private void leereStopDepartureList() {
         stopDepartureList.clear();
     }
@@ -503,8 +467,6 @@ public class MapActivity extends AppCompatActivity {
         });
     }
 
-
-
     //Abruf NextbikeAPI
     private void loadNextbikeApi(double latitude, double longitude) {
         textView.setText("Lade Nextbike Stationen");
@@ -587,8 +549,4 @@ public class MapActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 }
-

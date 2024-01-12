@@ -1,20 +1,20 @@
 package com.coradia.mobilsoftware_projekt;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_details);
 
         Toolbar toolbar = findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
@@ -24,16 +24,16 @@ public class MainActivity extends AppCompatActivity {
         Button mapButton = findViewById(R.id.map_button);
         Button detailsButton = findViewById(R.id.details_button);
 
-        mainButton.setBackgroundColor(getColor(R.color.Alarmred));
+        detailsButton.setBackgroundColor(getColor(R.color.Alarmred));
 
-        mapButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this,MapActivity.class);
+        mainButton.setOnClickListener(view -> {
+            Intent intent = new Intent(DetailActivity.this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
 
-        detailsButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+        mapButton.setOnClickListener(view -> {
+            Intent intent = new Intent(DetailActivity.this,MapActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
