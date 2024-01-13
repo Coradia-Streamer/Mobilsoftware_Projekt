@@ -9,55 +9,28 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/Alarmred"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/logoImageView"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_gravity="start"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="300dp"
-        android:layout_marginBottom="11dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginVertical="12dp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/hka_logo"
+        android:src="@drawable/bwscore_logo_grey"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/appNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="20dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textColor="#474040"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/HKADescription2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="30dp"
         android:background="@color/white"
@@ -70,7 +43,6 @@
         app:layout_constraintTop_toBottomOf="@+id/mainDescription" />
 
     <TextView
-        android:id="@+id/mainnextbikelinkDescription"
         android:layout_width="178dp"
         android:layout_height="50dp"
         android:layout_marginBottom="156dp"
@@ -126,7 +98,6 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
-        android:id="@+id/bwegtlinkDescription"
         android:layout_width="182dp"
         android:layout_height="46dp"
         android:layout_marginBottom="160dp"
@@ -141,7 +112,6 @@
         app:layout_constraintStart_toStartOf="@+id/imagebwegt" />
 
     <Button
-        android:id="@+id/mapButton"
         android:layout_width="350dp"
         android:layout_height="48dp"
         android:layout_marginStart="20dp"

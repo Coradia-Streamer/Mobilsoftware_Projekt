@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import com.coradia.mobilsoftware_projekt.objects.LocationParent;
 import com.coradia.mobilsoftware_projekt.objects.LocationProperties;
 import com.coradia.mobilsoftware_projekt.objects.ProductClassMeaning;
 import com.coradia.mobilsoftware_projekt.objects.StopEvents;
+import com.google.android.material.color.MaterialColors;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -74,8 +76,7 @@ public class MapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
-        Toolbar toolbar = findViewById(R.id.appbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
@@ -83,7 +84,7 @@ public class MapActivity extends AppCompatActivity {
         Button mapButton = findViewById(R.id.map_button);
         Button detailsButton = findViewById(R.id.details_button);
 
-        mapButton.setBackgroundColor(getColor(R.color.Alarmred));
+        mapButton.setBackgroundColor(MaterialColors.getColor(this, androidx.appcompat.R.attr.colorPrimary, Color.WHITE));
 
         mainButton.setOnClickListener(view -> {
             Intent intent = new Intent(MapActivity.this,MainActivity.class);

@@ -1,27 +1,32 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Uebung02_Java" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Mobilsoftware_Projekt" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/Alarmred</item>
-        <item name="colorPrimaryVariant">@color/Alarmred</item>
+        <item name="colorPrimary">@color/darkColorPrimary</item>
+        <item name="colorPrimaryVariant">#FFEB3B</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#494C4C</item>
         <item name="colorSecondaryVariant">#5A5C5C</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/Alarmred</item>
+        <item name="android:statusBarColor">#FFEB3B</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="Theme.NoActionBar" parent="Theme.Uebung02_Java">
+    <style name="Theme.NoActionBar" parent="DarkTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimaryVariant">@color/Alarmred</item>
     </style>
   <!-- Base application theme. -->
-    <style name="Base.Theme.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="DarkTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/darkColorPrimary</item>
+        <item name="colorPrimaryVariant">@color/darkColorPrimaryVariant</item>
+        <item name="colorSecondary">@color/darkColorSecondary</item>
+        <item name="colorSecondaryVariant">@color/darkColorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/darkColorOnSecondary</item>
     </style>
 
 </resources>
