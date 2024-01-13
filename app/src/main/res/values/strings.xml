@@ -2,7 +2,10 @@
     <string name="app_name">bwScore</string>
     <string name="details_text">DETAILS</string>
     <string name="main_text">APP-INFO</string>
-    <string name="map_text">KARTE</string>
-    <string name="mobscore_text">Dein aktueller Mobility-Score ist:</string>
+    <string name="map_text">SCORE</string>
+    <string name="mobscore_text">Dein Mobility-Score ist:</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="map_description">Karte/Score</string>
+    <string name="main_description">App-Info</string>
+    <string name="details_description">Details</string>
 </resources>
