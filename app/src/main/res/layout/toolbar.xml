@@ -35,11 +35,11 @@
         app:layout_constraintVertical_bias="0.261" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="MAP"
+        android:text="SCORE"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -68,10 +68,11 @@
         app:layout_constraintVertical_bias="0.261" />
 
     <TextView
+        android:id="@+id/textViewMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="MAIN"
+        android:text="INFO"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -100,10 +101,11 @@
         app:layout_constraintVertical_bias="0.261" />
 
     <TextView
+        android:id="@+id/textViewDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="OVERVIEW"
+        android:text="DETAILS"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
