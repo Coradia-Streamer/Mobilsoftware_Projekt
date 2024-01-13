@@ -157,6 +157,7 @@ public class Calculator {
         return grade;
     }
 
+    //Notenrechner Gesamtnote Bike
     public double getGradeBikeComplete(List<NextbikeInfo> nextbikeInfoList) {
 
         int bikeAmount = NextbikeInfo.getTotalBikeCount(nextbikeInfoList);
@@ -174,7 +175,7 @@ public class Calculator {
 
 
 
-
+    //Notenrechner Finale MobileScore Note
     public double getFinalGrade(List<StopInfo> stopInfoList, List<NextbikeInfo> nextbikeInfoList) {
 
         int stopAmount = stopInfoList.size();
