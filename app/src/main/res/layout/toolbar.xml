@@ -18,15 +18,16 @@
 
     <Button
         android:id="@+id/map_button"
-        android:layout_width="80dp"
+        android:layout_width="95dp"
         android:layout_height="58dp"
-        android:backgroundTint="?attr/colorOnSecondary"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
         app:cornerRadius="8dp"
         app:icon="@drawable/baseline_map_24"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:iconSize="40dp"
-        app:iconTint="?attr/colorPrimaryVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,12 +35,13 @@
         app:layout_constraintVertical_bias="0.261" />
 
     <TextView
+        android:id="@+id/textViewMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/map_text"
+        android:text="SCORE"
         android:textAlignment="center"
-        android:textColor="?attr/colorOnSecondary"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/appbar"
@@ -49,15 +51,16 @@
 
     <Button
         android:id="@+id/main_button"
-        android:layout_width="80dp"
+        android:layout_width="95dp"
         android:layout_height="58dp"
-        android:backgroundTint="?attr/colorOnSecondary"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
         app:cornerRadius="8dp"
         app:icon="@drawable/baseline_feed_24"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:iconSize="40dp"
-        app:iconTint="?attr/colorPrimaryVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/map_button"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,12 +68,13 @@
         app:layout_constraintVertical_bias="0.261" />
 
     <TextView
+        android:id="@+id/textViewMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/main_text"
+        android:text="INFO"
         android:textAlignment="center"
-        android:textColor="?attr/colorOnSecondary"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/appbar"
@@ -80,15 +84,16 @@
 
     <Button
         android:id="@+id/details_button"
-        android:layout_width="80dp"
+        android:layout_width="95dp"
         android:layout_height="58dp"
-        android:backgroundTint="?attr/colorOnSecondary"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
         app:cornerRadius="8dp"
         app:icon="@drawable/baseline_display_settings_24"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:iconSize="40dp"
-        app:iconTint="?attr/colorPrimaryVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/map_button"
@@ -96,12 +101,13 @@
         app:layout_constraintVertical_bias="0.261" />
 
     <TextView
+        android:id="@+id/textViewDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/details_text"
+        android:text="DETAILS"
         android:textAlignment="center"
-        android:textColor="?attr/colorOnSecondary"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/appbar"
