@@ -24,18 +24,11 @@ public class NextbikeApiClient {
                 .build();
     }
 
-    public String createCoordinateString(double latitude, double longitude) {
-        return String.format(Locale.ENGLISH, "%f:%f:WGS84[dd.ddddd]", longitude, latitude);
-    }
-
     public double createLatitude(double latitude) {
         return latitude;
 
     }
 
-    public double createLongitude(double longitude) {
-        return longitude;
-    }
 
     public NextbikeApi getClient() {
         return this.retrofit.create(NextbikeApi.class);

@@ -24,6 +24,7 @@ public class NextbikeInfo {
         this.dist = dist;
     }
 
+    //Loggen der Nextbike Info Liste
     public static void loggeNextbikeInfoListe(List<NextbikeInfo> nextbikeInfoList) {
         for (NextbikeInfo daten : nextbikeInfoList) {
             @SuppressLint("DefaultLocale") String logText = String.format(
@@ -40,6 +41,7 @@ public class NextbikeInfo {
         }
     }
 
+    //Gesamtanzahl Bikes
     public static int getTotalBikeCount(List<NextbikeInfo> nextbikeInfoList) {
         int totalBikes = 0;
 
@@ -50,6 +52,7 @@ public class NextbikeInfo {
         return totalBikes;
     }
 
+    //Gesamtanzahl BikeStations
     public static int getTotalStationCount(List<NextbikeInfo> nextbikeInfoList) {
         int totalStation = 0;
 
@@ -62,6 +65,7 @@ public class NextbikeInfo {
         return totalStation;
     }
 
+    //Nextbike Info Liste leeren
     public static void leereNextbikeInfoList(List<NextbikeInfo> nextbikeInfoList) {
         nextbikeInfoList.clear();
     }

@@ -33,18 +33,9 @@ public class CompareTime {
         String formattedCompareTime = sdf.format(compareTime);
         Log.d("Time","Vergleichszeit ISO 8601:" +formattedCompareTime);
 
-                /*
-                Instant instant = null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    instant = Instant.now();
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    System.out.println("Instant: " + DateTimeFormatter.ISO_INSTANT.format(instant));
-                }*/
 
         //Anpassung der ISO 8601 formattierten Vergleichszeit (Ersetzung von +0000 durch Z, notwendig damit .parse(...) funktioniert)
-
-        //Virtual
+        //Virtual-Device
         String ZformattedCompareTime = null;
         if (formattedCompareTime.contains("+0000")) {
             String target = "+0000";
@@ -52,7 +43,7 @@ public class CompareTime {
             ZformattedCompareTime = formattedCompareTime.replace(target,replacement);
 
 
-            //Physical
+            //Physical-Device
         } else if (formattedCompareTime.contains("+0100")) {
             String target = "+0100";
             String replacement = "Z";

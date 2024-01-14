@@ -30,6 +30,7 @@ public class StopInfo {
         this.productClasses = productClasses;
     }
 
+    //Loggen der Stop Info Liste
     public static void loggeStopInfoListe(List<StopInfo> stopInfoList) {
         for (StopInfo daten : stopInfoList) {
             @SuppressLint("DefaultLocale") String logText = String.format(
@@ -47,6 +48,7 @@ public class StopInfo {
         }
     }
 
+    //Stop Info Liste leeren
     public static void leereStopInfoList(List<StopInfo> stopInfoList) {
         stopInfoList.clear();
     }

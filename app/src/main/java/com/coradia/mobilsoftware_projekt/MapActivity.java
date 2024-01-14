@@ -437,10 +437,6 @@ public class MapActivity extends AppCompatActivity {
                 loadNextbikeApi(mapView.getMapCenter().getLatitude(), mapView.getMapCenter().getLongitude());
 
 
-                /*Calculater calculater = new Calculater();
-
-                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList)));*/
-
 
             }
 
@@ -496,7 +492,6 @@ public class MapActivity extends AppCompatActivity {
                             stopDepartureList.add(departureTimePlanned);
                         }
 
-                        //Log.d("MapActivity", String.format("Die Abfahrt ist um %s", DepartureTimePlanned));
 
                     }
                 }
@@ -589,8 +584,6 @@ public class MapActivity extends AppCompatActivity {
                             NextbikeInfo nextbikeInfo = new NextbikeInfo(k, name, bike, spot, bikes, distance);
                             nextbikeInfoList.add(nextbikeInfo);
 
-
-                            //Log.d("Nextbike", name + ", Fahrrad? -> " + bike + ", Spot? -> " + spot + ", Anzahl Fahrräder: " + bikes + ", Abstand: " + distance);
                         }
 
                     }
@@ -598,12 +591,6 @@ public class MapActivity extends AppCompatActivity {
 
                 NextbikeInfo.loggeNextbikeInfoListe(nextbikeInfoList);
 
-                /*Calculater calculater = new Calculater();
-                textView.setText(String.valueOf(calculater.getFinalGrade(stopInfoList, nextbikeInfoList)));;*/
-
-                /*Calculater calculater = new Calculater();
-                double bikegrade = calculater.getGradeBikeComplete(nextbikeInfoList);
-                Log.d("Nextbike","Fahrradnote: " + bikegrade);*/
 
 
             }
