@@ -29,8 +29,6 @@ public class PopUp extends AppCompatActivity {
         boolean focusable = true;
         PopupWindow popUp = new PopupWindow(popupView, width, height, focusable);
 
-        popUp.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        popUp.setElevation(20);
         Handler handler = new Handler();
         handler.postDelayed(() -> popUp.showAtLocation(view, Gravity.TOP, 0, 300), 100L);
 

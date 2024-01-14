@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Button mapButton = findViewById(R.id.map_button);
         Button detailsButton = findViewById(R.id.details_button);
 
-        mainButton.setBackgroundColor(MaterialColors.getColor(this, androidx.appcompat.R.attr.colorPrimary, Color.WHITE));
+        mainButton.setBackgroundColor(Color.parseColor("#EBD11C"));
 
         mapButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this,MapActivity.class);

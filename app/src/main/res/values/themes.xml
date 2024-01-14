@@ -4,18 +4,20 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/darkColorPrimary</item>
         <item name="colorPrimaryVariant">@color/darkColorPrimaryVariant</item>
+        <item name="colorPrimaryContainer">@color/darkColorPrimary</item>
         <item name="colorOnPrimary">@color/darkColorOnPrimary</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/darkColorSecondary</item>
         <item name="colorSecondaryVariant">@color/darkColorSecondaryVariant</item>
+        <item name="colorSecondaryContainer">@color/darkColorSecondary</item>
         <item name="colorOnSecondary">@color/darkColorOnSecondary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/darkColorPrimary</item>
         <!-- Customize your theme here. -->
-        <item name="colorControlActivated">@color/darkColorPrimary</item>
+        <item name="colorControlActivated">@color/darkColorSecondary</item>
         <item name="colorSwitchThumbNormal">@color/darkColorOnSecondary</item>
-        <item name="android:colorForeground">@color/darkColorOnPrimary</item>
-        <item name="android:itemBackground">@color/darkColorSecondary</item>
+        <!-- <item name="android:colorForeground">@color/darkColorOnPrimary</item> -->
+        <item name="android:itemBackground">@color/darkColorPrimary</item>
         <item name="android:itemTextAppearance">@style/darkCustomTextMenu</item>
         <item name="actionOverflowButtonStyle">@style/darkIconOverflow</item>
         <item name="windowActionBar">false</item>
@@ -35,18 +37,20 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/lightColorPrimary</item>
         <item name="colorPrimaryVariant">@color/lightColorPrimaryVariant</item>
+        <item name="colorPrimaryContainer">@color/lightColorSecondaryVariant</item>
         <item name="colorOnPrimary">@color/lightColorOnPrimary</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/lightColorSecondary</item>
         <item name="colorSecondaryVariant">@color/lightColorSecondaryVariant</item>
+        <item name="colorSecondaryContainer">@color/lightColorOnPrimary</item>
         <item name="colorOnSecondary">@color/lightColorOnSecondary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/lightColorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="colorControlActivated">@color/lightColorPrimary</item>
         <item name="colorSwitchThumbNormal">@color/lightColorOnSecondary</item>
-        <item name="android:colorForeground">@color/lightColorPrimaryVariant</item>
-        <item name="android:itemBackground">@color/lightColorSecondary</item>
+        <!-- <item name="android:colorForeground">@color/lightColorPrimaryVariant</item> -->
+        <item name="android:itemBackground">@color/lightColorSecondaryVariant</item>
         <item name="android:itemTextAppearance">@style/lightCustomTextMenu</item>
         <item name="actionOverflowButtonStyle">@style/lightIconOverflow</item>
         <item name="windowActionBar">false</item>

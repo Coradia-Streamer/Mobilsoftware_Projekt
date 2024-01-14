@@ -8,11 +8,19 @@
 
     <include layout="@layout/toolbar" />
 
+    <View
+        android:id="@+id/shadow_background_top"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/shadow_background"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/testMap" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSecondary"
+        android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -22,7 +30,7 @@
         android:layout_height="0dp"
         android:layout_marginVertical="12dp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/bwscore_logo_dark_yellow_full"
+        android:src="@drawable/bwscore_logo_line"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/testMap"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,26 +73,35 @@
         android:minHeight="50dp"
         android:indeterminate="true"
         android:indeterminateTintMode="src_atop"
-        android:indeterminateTint="?attr/colorSecondary"
+        android:indeterminateTint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/shadow_background"
+        android:id="@+id/shadow_background_bottom"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="20dp"
         android:background="@drawable/shadow_background"
         app:layout_constraintTop_toBottomOf="@+id/testMap"
         app:layout_constraintBottom_toTopOf="@+id/mobscoreContainer" />
+
+    <View
+        android:id="@+id/shadow_background_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="86dp"
+        android:layout_marginBottom="94dp"
+        android:background="@drawable/shadow_background_yellow"
+        app:layout_constraintTop_toTopOf="@+id/mobscoreContainer"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <LinearLayout
         android:id="@+id/mobscoreContainer"
         android:layout_width="match_parent"
         android:layout_height="101dp"
         android:layout_marginBottom="99dp"
-        android:background="@drawable/rounded_background_mobscore"
         android:background="?attr/colorPrimaryVariant"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -94,14 +111,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="?attr/colorSecondary"
+            android:background="?attr/colorPrimary"
             android:padding="5sp"
             android:text="@string/mobscore_text"
             android:textAlignment="center"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="?attr/colorSecondary"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:background="@drawable/rounded_background"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
@@ -120,5 +136,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
