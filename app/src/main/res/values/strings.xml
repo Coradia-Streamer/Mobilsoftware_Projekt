@@ -8,4 +8,5 @@
     <string name="map_description">Karte/Score</string>
     <string name="main_description">App-Info</string>
     <string name="details_description">Details</string>
+    <string name="light_theme_name">Light Theme</string>
 </resources>

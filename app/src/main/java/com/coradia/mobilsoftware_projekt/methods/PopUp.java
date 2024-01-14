@@ -1,29 +1,22 @@
 package com.coradia.mobilsoftware_projekt.methods;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
-import com.coradia.mobilsoftware_projekt.MainActivity;
 import com.coradia.mobilsoftware_projekt.R;
-
-import java.util.logging.ConsoleHandler;
 
 public class PopUp extends AppCompatActivity {
 
