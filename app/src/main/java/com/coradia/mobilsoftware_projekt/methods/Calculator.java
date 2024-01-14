@@ -126,9 +126,9 @@ public class Calculator {
         double grade4 = getGradeStopModules(productClasses);
         double putGrade = (grade1 + grade2 + grade3 + grade4) / 4;
 
-        double finalGrade = Math.round((putGrade + bikegrade) * 2) / 4f;
+        double finalGrade = (putGrade + bikegrade) / 2;
 
-        return finalGrade + ":" + finalGrade + ";" + putGrade + ";" + grade1 + "," + grade2 + "," + grade3 + "," + grade4 + ";" + bikegrade + ";" + bikegrade1 + "," + bikegrade2 + "," + bikegrade3;
+        return round(finalGrade) + ":" + round(finalGrade) + ";" + round(putGrade) + ";" + round(grade1) + "," + round(grade2) + "," + round(grade3) + "," + round(grade4) + ";" + round(bikegrade) + ";" + round(bikegrade1) + "," + round(bikegrade2) + "," + round(bikegrade3);
     }
 
     public double castGrade(double grade) {
@@ -138,5 +138,9 @@ public class Calculator {
             grade = 6;
         }
         return grade;
+    }
+
+    public double round(double grade) {
+        return Math.round(grade * 4) / 4f;
     }
 }

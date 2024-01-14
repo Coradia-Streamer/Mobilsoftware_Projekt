@@ -229,8 +229,8 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    Handler handler = new Handler();
-    Runnable runnable;
+    Handler h = new Handler();
+    Runnable r;
     int delay = 2*1000;
     double savedDistance = 0;
     boolean toggleInstance = FALSE;
@@ -254,7 +254,8 @@ public class MapActivity extends AppCompatActivity {
             editor.putBoolean("mapCallReCreate", false);
             editor.apply();
         }
-        handler.postDelayed(runnable = () -> {
+
+        h.postDelayed(r = () -> {
             if (toggleFirst) {
                 if (!toggleInstance) {
                     reference = new GeoPoint(mapView.getMapCenter());
@@ -284,14 +285,14 @@ public class MapActivity extends AppCompatActivity {
                 }
                 //Log.d("Runnable", "I'm doing something");
             }
-            handler.postDelayed(runnable, delay);
+            h.postDelayed(r, delay);
         }, delay);
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        handler.removeCallbacks(runnable);
+        h.removeCallbacks(r);
         super.onPause();
     }
 

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -17,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.coradia.mobilsoftware_projekt.methods.PopUp;
 
 import java.util.Objects;
+import java.util.StringTokenizer;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -69,9 +72,11 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    Handler h = new Handler();
+    Runnable r;
+    int delay = 1000 * 2;
     @Override
     protected void onResume() {
-        toggleDetails = sharedPreferences.getBoolean("toggleDetails", false);
         boolean toggleReCreate = sharedPreferences.getBoolean("detailCallReCreate", false);
         if (toggleReCreate && starterIntent != null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -86,6 +91,42 @@ public class DetailActivity extends AppCompatActivity {
             editor.apply();
         }
         super.onResume();
+
+        h.postDelayed(r = () -> {
+            toggleDetails = sharedPreferences.getBoolean("toggleDetails", false);
+            if (toggleDetails) {
+                String grade = sharedPreferences.getString("scoreDetails", "");
+                if (!grade.equals("")) {
+                    StringTokenizer g = new StringTokenizer(grade, ";");
+
+                    String finalGrade = g.nextToken();
+
+                    String[] oepnvGrade = new String[5];
+                    oepnvGrade[0] = g.nextToken();
+
+                    StringTokenizer oepnv = new StringTokenizer(g.nextToken(), ",");
+                    for (int i = 0; i < 4; i++) {
+                        oepnvGrade[i+1] = oepnv.nextToken();
+                    }
+
+                    String[] bikeGrade = new String[4];
+                    bikeGrade[0] = g.nextToken();
+
+                    StringTokenizer bike = new StringTokenizer(g.nextToken(), ",");
+                    for (int i = 0; i < 3; i++) {
+                        bikeGrade[i+1] = bike.nextToken();
+                    }
+
+                    Log.i("Grade", "Final Grade: " + finalGrade);
+                    for (int i = 0; i < oepnvGrade.length; i++) {
+                        Log.i("Grade", "ÖPNV Grade" + i + ": " + oepnvGrade[i]);
+                    }
+                    for (int i = 0; i < bikeGrade.length; i++) {
+                        Log.i("Grade", "Bike Grade" + i + ": " + bikeGrade[i]);
+                    }
+                }
+            }
+        }, delay);
     }
 
     private void setDynamicTheme(int selectedTheme) {
