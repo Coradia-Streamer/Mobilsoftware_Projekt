@@ -3,30 +3,61 @@
     <style name="Theme.Mobilsoftware_Projekt" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/darkColorPrimary</item>
-        <item name="colorPrimaryVariant">#FFEB3B</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">#494C4C</item>
-        <item name="colorSecondaryVariant">#5A5C5C</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">#FFEB3B</item>
-        <!-- Customize your theme here. -->
-    </style>
-    <style name="Theme.NoActionBar" parent="DarkTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-  <!-- Base application theme. -->
-
-    <style name="DarkTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/darkColorPrimary</item>
         <item name="colorPrimaryVariant">@color/darkColorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/darkColorOnPrimary</item>
+        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/darkColorSecondary</item>
         <item name="colorSecondaryVariant">@color/darkColorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/darkColorOnSecondary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/darkColorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="colorControlActivated">@color/darkColorPrimary</item>
+        <item name="colorSwitchThumbNormal">@color/darkColorOnSecondary</item>
+        <item name="android:colorForeground">@color/darkColorOnPrimary</item>
+        <item name="android:itemBackground">@color/darkColorSecondary</item>
+        <item name="android:itemTextAppearance">@style/darkCustomTextMenu</item>
+        <item name="actionOverflowButtonStyle">@style/darkIconOverflow</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="darkCustomTextMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/darkColorOnSecondary</item>
+    </style>
+    <style name="darkIconOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/darkColorOnSecondary</item>
+    </style>
+    <!-- Base application theme. -->
+
+    <!-- Light application theme. -->
+    <style name="LightTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/lightColorPrimary</item>
+        <item name="colorPrimaryVariant">@color/lightColorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/lightColorOnPrimary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/lightColorSecondary</item>
+        <item name="colorSecondaryVariant">@color/lightColorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/lightColorOnSecondary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/lightColorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="colorControlActivated">@color/lightColorPrimary</item>
+        <item name="colorSwitchThumbNormal">@color/lightColorOnSecondary</item>
+        <item name="android:colorForeground">@color/lightColorPrimaryVariant</item>
+        <item name="android:itemBackground">@color/lightColorSecondary</item>
+        <item name="android:itemTextAppearance">@style/lightCustomTextMenu</item>
+        <item name="actionOverflowButtonStyle">@style/lightIconOverflow</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="lightCustomTextMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/lightColorOnSecondary</item>
+    </style>
+    <style name="lightIconOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/lightColorOnSecondary</item>
+    </style>
+    <!-- Light application theme. -->
 </resources>

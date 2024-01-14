@@ -1,29 +1,51 @@
 package com.coradia.mobilsoftware_projekt;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.AttributeSet;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.coradia.mobilsoftware_projekt.methods.PopUp;
 import com.google.android.material.color.MaterialColors;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    SharedPreferences sharedPreferences;
+    private final Context activityContext = MainActivity.this;
+    private Intent starterIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int selectedTheme = sharedPreferences.getInt("SelectedTheme", 0);
+        setDynamicTheme(selectedTheme);
+
         setContentView(R.layout.activity_main);
-        setTheme(R.style.Theme_Mobilsoftware_Projekt);
+
+        boolean togglePopSettings = sharedPreferences.getBoolean("togglePopSettings", false);
+        if (togglePopSettings) {
+            PopUp popUp = new PopUp();
+            popUp.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "MainActivity");
+        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("togglePopSettings", false);
+        editor.apply();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -37,30 +59,60 @@ public class MainActivity extends AppCompatActivity {
 
         mapButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this,MapActivity.class);
+            starterIntent = intent;
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
 
         detailsButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+            starterIntent = intent;
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
     }
 
     @Override
+    protected void onResume() {
+        boolean toggleReCreate = sharedPreferences.getBoolean("mainCallReCreate", false);
+        if (toggleReCreate && starterIntent != null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("mainCallReCreate", false);
+            editor.apply();
+            Intent intentRe = new Intent(MainActivity.this,MainActivity.class);
+            finish();
+            startActivity(intentRe);
+        } else if (starterIntent == null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("mainCallReCreate", false);
+            editor.apply();
+        }
+        super.onResume();
+    }
+
+    private void setDynamicTheme(int selectedTheme) {
+        switch (selectedTheme) {
+            case 0:
+                MainActivity.this.setTheme(R.style.Theme_Mobilsoftware_Projekt);
+                break;
+            case 1:
+                MainActivity.this.setTheme(R.style.LightTheme);
+                break;
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = new MenuInflater(this);
-        inflater.inflate(R.menu.menu_default, menu);
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_default, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
-
+            PopUp popUp = new PopUp();
+            popUp.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "MainActivity");
             return true;
         }
 

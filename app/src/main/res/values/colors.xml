@@ -8,9 +8,16 @@
     <color name="Alarmred">#F45236</color>
 
     <color name="darkColorPrimary">#EBD11C</color>
-    <color name="darkColorPrimaryVariant">#000000</color>
+    <color name="darkColorPrimaryVariant">#636363</color>
+    <color name="darkColorOnPrimary">#000000</color>
     <color name="darkColorSecondary">#3A3A45</color>
-    <color name="darkColorSecondaryVariant">#636363</color>
+    <color name="darkColorSecondaryVariant">#3A3A45</color>
     <color name="darkColorOnSecondary">#FFFFFF</color>
 
+    <color name="lightColorPrimary">#3A3A45</color> <!-- -->
+    <color name="lightColorPrimaryVariant">#FFFFFF</color>
+    <color name="lightColorOnPrimary">#FFFFFF</color> <!-- -->
+    <color name="lightColorSecondary">#EBD11C</color> <!-- -->
+    <color name="lightColorSecondaryVariant">#8A8A8A</color> <!-- -->
+    <color name="lightColorOnSecondary">#3A3A45</color> <!-- -->
 </resources>

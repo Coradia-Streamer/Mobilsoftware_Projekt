@@ -6,20 +6,26 @@ import static java.lang.Boolean.TRUE;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -27,6 +33,7 @@ import androidx.core.app.ActivityCompat;
 import com.coradia.mobilsoftware_projekt.methods.Calculator;
 import com.coradia.mobilsoftware_projekt.methods.CompareTime;
 import com.coradia.mobilsoftware_projekt.methods.NextbikeInfo;
+import com.coradia.mobilsoftware_projekt.methods.PopUp;
 import com.coradia.mobilsoftware_projekt.methods.StopInfo;
 import com.coradia.mobilsoftware_projekt.network.EfaApiClient;
 import com.coradia.mobilsoftware_projekt.network.NextbikeApiClient;
@@ -66,6 +73,9 @@ import retrofit2.Response;
 
 public class MapActivity extends AppCompatActivity {
 
+    SharedPreferences sharedPreferences;
+    private final Context activityContext = MapActivity.this;
+    private Intent starterIntent;
     private MapView mapView;
     private TextView textView;
     Boolean toggleProgress = FALSE;
@@ -75,7 +85,22 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int selectedTheme = sharedPreferences.getInt("SelectedTheme", 0);
+        setDynamicTheme(selectedTheme);
+
         setContentView(R.layout.activity_map);
+
+        boolean togglePopSettings = sharedPreferences.getBoolean("togglePopSettings", false);
+        if (togglePopSettings) {
+            PopUp popUp = new PopUp();
+            popUp.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "MapActivity");
+        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("togglePopSettings", false);
+        editor.apply();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -88,12 +113,14 @@ public class MapActivity extends AppCompatActivity {
 
         mainButton.setOnClickListener(view -> {
             Intent intent = new Intent(MapActivity.this,MainActivity.class);
+            starterIntent = intent;
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
 
         detailsButton.setOnClickListener(view -> {
             Intent intent = new Intent(MapActivity.this,DetailActivity.class);
+            starterIntent = intent;
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
@@ -174,6 +201,35 @@ public class MapActivity extends AppCompatActivity {
         });
     }
 
+    private void setDynamicTheme(int selectedTheme) {
+        switch (selectedTheme) {
+            case 0:
+                MapActivity.this.setTheme(R.style.Theme_Mobilsoftware_Projekt);
+                break;
+            case 1:
+                MapActivity.this.setTheme(R.style.LightTheme);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_default, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            PopUp popUp = new PopUp();
+            popUp.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "MapActivity");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     Handler handler = new Handler();
     Runnable runnable;
@@ -187,6 +243,19 @@ public class MapActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        boolean toggleReCreate = sharedPreferences.getBoolean("mapCallReCreate", false);
+        if (toggleReCreate && starterIntent != null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("mapCallReCreate", false);
+            editor.apply();
+            Intent intentRe = new Intent(MapActivity.this,MapActivity.class);
+            finish();
+            startActivity(intentRe);
+        } else if (starterIntent == null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("mapCallReCreate", false);
+            editor.apply();
+        }
         handler.postDelayed(runnable = () -> {
             if (toggleFirst) {
                 if (!toggleInstance) {
