@@ -46,7 +46,6 @@ import com.coradia.mobilsoftware_projekt.objects.LocationParent;
 import com.coradia.mobilsoftware_projekt.objects.LocationProperties;
 import com.coradia.mobilsoftware_projekt.objects.ProductClassMeaning;
 import com.coradia.mobilsoftware_projekt.objects.StopEvents;
-import com.google.android.material.color.MaterialColors;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -64,6 +63,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringTokenizer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -513,7 +513,14 @@ public class MapActivity extends AppCompatActivity {
                                 StopInfo.loggeStopInfoListe(stopInfoList);
 
                                 Calculator calculator = new Calculator();
-                                textView.setText(String.valueOf(calculator.getFinalGrade(stopInfoList, nextbikeInfoList)));
+                                String scoreDetails = calculator.getFinalGrade(stopInfoList, nextbikeInfoList);
+                                StringTokenizer st = new StringTokenizer(scoreDetails, ":");
+                                textView.setText(st.nextToken());
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("toggleDetails", true);
+                                editor.putString("scoreDetails", st.nextToken());
+                                editor.apply();
                             }
 
                         }

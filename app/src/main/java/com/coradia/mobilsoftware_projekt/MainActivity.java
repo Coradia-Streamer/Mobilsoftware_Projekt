@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.coradia.mobilsoftware_projekt.methods.PopUp;
-import com.google.android.material.color.MaterialColors;
 
 import java.util.Objects;
 
@@ -42,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("togglePopSettings", false);
+
+        editor.putBoolean("toggleDetails", false);
         editor.apply();
 
         Toolbar toolbar = findViewById(R.id.toolbar);

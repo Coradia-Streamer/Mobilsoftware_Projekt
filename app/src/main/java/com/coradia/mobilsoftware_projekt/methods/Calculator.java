@@ -4,72 +4,27 @@ import java.util.List;
 
 public class Calculator {
 
-
-    double gradeStopAmount;
-
-    double gradeStopDistance;
-
-    double gradeStopDeparture;
-
-    double gradeStopModules;
-
-    double gradeBikeAmount;
-
-    double gradeBikeStationAmount;
-
-    double gradeBikeDistance;
-
-    double finalGrade;
-
     //Notenrechner ÖPNV:
     //Notenrechner Haltestellendichte
     public double getGradeStopAmount(int stopAmount) {
-
-        int stopamountnew;
-
-        if (stopAmount > 20) {
-            stopamountnew = 20;
-        } else {
-            stopamountnew = stopAmount;
-        }
-
-        double grade = 6 - 5.0 * stopamountnew / 20;
-        return grade;
+        int stopamountnew = Math.min(stopAmount, 20);
+        return 6 - 5.0 * stopamountnew / 20;
     }
 
     //Notenrechner Haltestellenabstand
     public double getGradeStopDistance(double stopDistance) {
-
         double grade = 1.0 / 150 * stopDistance - 2.0 / 3;
-
-        if (grade < 1) {
-            grade = 1;
-        } else if (grade > 6) {
-            grade = 6;
-
-        }
-
-        return grade;
-
+        return castGrade(grade);
     }
 
     //Notenrechner Abfahrten
     public double getGradeStopDeparture(double stopDeparture) {
-
-        //WICHTIG: ANZAHL DER HALTESTELLEN AUF MITTELWERT VORHER BRINGEN!!!!!!!!!
         double grade = 6 - 5.0 * (stopDeparture) / (12);
-
-        if (grade < 1) {
-            grade = 1;
-        }
-
-        return grade;
-
+        return castGrade(grade);
     }
 
     //Notenrechner Verkehrsmittel
     public double getGradeStopModules(int[] productClasses) {
-
         int bahn = 0;
         int schiene = 0;
         int strasse = 0;
@@ -90,7 +45,7 @@ public class Calculator {
             }
         }
 
-
+        //Ansatz für Präferenzen
         bahn = bahn * 4;
         schiene = schiene * 3;
         strasse = strasse * 2;
@@ -100,83 +55,32 @@ public class Calculator {
         int punkte = bahn + schiene + strasse + ondemand;
 
         double grade = 6 - 5.0 * (punkte) / (12);
-
-        if (grade < 1) {
-            grade = 1;
-        }
-
-        return grade;
-
-
+        return castGrade(grade);
     }
+
 
     //Notenrechner Nextbikes:
     //Notenrechner Anzahl Fahrräder
     public double getGradeBikeAmount(int bikeAmount) {
-
         double grade = 6 - 5.0 * bikeAmount / 125;
-
-        if (grade < 1) {
-            grade = 1;
-        } else if (grade > 6) {
-            grade = 6;
-
-        }
-
-        return grade;
+        return castGrade(grade);
     }
-
 
     //Notenrechner Anzahl Station
     public double getGradeBikeStationAmount(int stationAmount) {
-
         double grade = 6 - 5.0 * stationAmount / 7;
-
-        if (grade < 1) {
-            grade = 1;
-        } else if (grade > 6) {
-            grade = 6;
-
-        }
-
-        return grade;
+        return castGrade(grade);
     }
 
     //Notenrechner Abstand Fahrrad/Station
     public double getGradeBikeDistance(double bikeDistance) {
-
         double grade = 1.0/190 * bikeDistance + 14.0/19;
-
-        if (grade < 1) {
-            grade = 1;
-        } else if (grade > 6) {
-            grade = 6;
-
-        }
-
-        return grade;
+        return castGrade(grade);
     }
-
-    //Notenrechner Gesamtnote Bike
-    public double getGradeBikeComplete(List<NextbikeInfo> nextbikeInfoList) {
-
-        int bikeAmount = NextbikeInfo.getTotalBikeCount(nextbikeInfoList);
-        int bikeStationAmount = NextbikeInfo.getTotalStationCount(nextbikeInfoList);
-        double bikeDistance = nextbikeInfoList.get(0).getDist();
-
-        double bikegrade = (getGradeBikeAmount(bikeAmount) + getGradeBikeStationAmount(bikeStationAmount) + getGradeBikeDistance(bikeDistance)) / 3;
-
-        double bikegrade1 = getGradeBikeAmount(bikeAmount);
-        double bikegrade2 = getGradeBikeStationAmount(bikeStationAmount);
-        double bikegrade3 = getGradeBikeDistance(bikeDistance);
-
-        return bikegrade;
-    }
-
 
 
     //Notenrechner Finale MobileScore Note
-    public double getFinalGrade(List<StopInfo> stopInfoList, List<NextbikeInfo> nextbikeInfoList) {
+    public String getFinalGrade(List<StopInfo> stopInfoList, List<NextbikeInfo> nextbikeInfoList) {
 
         int stopAmount = stopInfoList.size();
         double stopDistance = stopInfoList.get(0).getEntfernung();
@@ -195,16 +99,10 @@ public class Calculator {
         for (int i = 0; i < stopInfoList.size(); i++) {
             int[] productList = stopInfoList.get(i).getProductClasses();
 
-            for (int j = 0; j < productList.length; j++) {
-                productClasses[productList[j]] = 1;
-
-
+            for (int j : productList) {
+                productClasses[j] = 1;
             }
-
         }
-
-
-        double putGrade = (getGradeStopAmount(stopAmount) + getGradeStopDistance(stopDistance) + getGradeStopDeparture(stopDeparture) + getGradeStopModules(productClasses)) / 4;
 
         int bikeAmount = NextbikeInfo.getTotalBikeCount(nextbikeInfoList);
         int bikeStationAmount = NextbikeInfo.getTotalStationCount(nextbikeInfoList);
@@ -216,23 +114,29 @@ public class Calculator {
             bikeDistance = Double.MAX_VALUE;
         }
 
-        double bikegrade = (getGradeBikeAmount(bikeAmount) + getGradeBikeStationAmount(bikeStationAmount) + getGradeBikeDistance(bikeDistance)) / 3;
 
         double bikegrade1 = getGradeBikeAmount(bikeAmount);
         double bikegrade2 = getGradeBikeStationAmount(bikeStationAmount);
         double bikegrade3 = getGradeBikeDistance(bikeDistance);
+        double bikegrade = (bikegrade1 + bikegrade2 + bikegrade3) / 3;
 
         double grade1 = getGradeStopAmount(stopAmount);
         double grade2 = getGradeStopDistance(stopDistance);
         double grade3 = getGradeStopDeparture(stopDeparture);
         double grade4 = getGradeStopModules(productClasses);
+        double putGrade = (grade1 + grade2 + grade3 + grade4) / 4;
 
-        double grade = (putGrade + bikegrade) / 2;
+        double finalGrade = Math.round((putGrade + bikegrade) * 2) / 4f;
 
-        grade = Math.round(grade * 4) / 4f;
-
-        return grade;
+        return finalGrade + ":" + finalGrade + ";" + putGrade + ";" + grade1 + "," + grade2 + "," + grade3 + "," + grade4 + ";" + bikegrade + ";" + bikegrade1 + "," + bikegrade2 + "," + bikegrade3;
     }
 
-
+    public double castGrade(double grade) {
+        if (grade < 1) {
+            grade = 1;
+        } else if (grade > 6) {
+            grade = 6;
+        }
+        return grade;
+    }
 }

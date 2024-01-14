@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.coradia.mobilsoftware_projekt.methods.PopUp;
-import com.google.android.material.color.MaterialColors;
 
 import java.util.Objects;
 
@@ -24,6 +23,7 @@ public class DetailActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     private final Context activityContext = DetailActivity.this;
     private Intent starterIntent;
+    private boolean toggleDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,7 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        toggleDetails = sharedPreferences.getBoolean("toggleDetails", false);
         boolean toggleReCreate = sharedPreferences.getBoolean("detailCallReCreate", false);
         if (toggleReCreate && starterIntent != null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();

@@ -9,4 +9,5 @@
     <string name="main_description">App-Info</string>
     <string name="details_description">Details</string>
     <string name="light_theme_name">Light Theme</string>
+    <string name="waiting_score">Hier erscheint eine Übersicht zu den Details des Mobility-Scores\n \n \n Zuerst über \'SCORE\' einen Mobility-Score berechnen lassen</string>
 </resources>
