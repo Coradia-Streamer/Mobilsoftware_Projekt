@@ -18,11 +18,11 @@
     <string name="grade_bike">Nextbike Note</string>
     <string name="grade_offset">setzt sich zusammen aus:</string>
     <string name="grade_stopAmount">Anzahl der Haltestellen</string>
-    <string name="grade_stopDistance">Entfernung zu den Haltestellen</string>
+    <string name="grade_stopDistance">Entfernung nächste Haltestelle</string>
     <string name="grade_stopDeparture">Abfahrten an den Haltestellen</string>
     <string name="grade_stopModules">Anzahl Verkehrsmitteltypen</string>
-    <string name="grade_bikeAmount">Anzahl der Fahrräder</string>
+    <string name="grade_bikeAmount">Anzahl der Nextbikes</string>
     <string name="grade_bikeStations">Anzahl der Nextbike Stationen</string>
-    <string name="grade_bikeDistance">Entfernung zum nächsten Nextbike</string>
+    <string name="grade_bikeDistance">Entfernung nächstes Nextbike</string>
     <string name="grade_explanation">Erläuterungen zum Mobility-Score:</string>
 </resources>

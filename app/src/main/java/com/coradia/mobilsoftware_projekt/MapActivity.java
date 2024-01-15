@@ -514,7 +514,7 @@ public class MapActivity extends AppCompatActivity {
                                 StopInfo.loggeStopInfoListe(stopInfoList);
 
                                 Calculator calculator = new Calculator();
-                                String scoreDetails = calculator.getFinalGrade(stopInfoList, nextbikeInfoList);
+                                String scoreDetails = calculator.getFinalGrade(stopInfoList, nextbikeInfoList, sharedPreferences);
                                 StringTokenizer st = new StringTokenizer(scoreDetails, ":");
                                 textView.setText(st.nextToken());
 

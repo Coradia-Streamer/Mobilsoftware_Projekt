@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">bwScore</string>
+    <string name="details_text">DETAILS</string>
+    <string name="main_text">APP-INFO</string>
+    <string name="map_text">SCORE</string>
+    <string name="mobscore_text">Your Mobility-Score is:</string>
+    <string name="action_settings">Settings</string>
+    <string name="map_description">Map/Score</string>
+    <string name="main_description">App-Info</string>
+    <string name="details_description">Details</string>
+    <string name="light_theme_name">Light Theme</string>
+    <string name="waiting_score">Here will appear an overview over the details of your Mobility-Scoere\n \n \n But first, a Mobility-Score has to be calculated via \'SCORE\'</string>
+    <string name="grade_header">Details of your Mobility-Score</string>
+    <string name="test">Test Value</string>
+    <string name="line_description">Parting line</string>
+    <string name="grade_final">Final Grade</string>
+    <string name="grade_pt">Public Transport Grade</string>
+    <string name="grade_bike">Nextbike Grade</string>
+    <string name="grade_offset">is build up of:</string>
+    <string name="grade_stopAmount">Amount of stops</string>
+    <string name="grade_stopDistance">Distance to the stops</string>
+    <string name="grade_stopDeparture">Departures at the stops</string>
+    <string name="grade_stopModules">Different types of transport</string>
+    <string name="grade_bikeAmount">Amount of Nextbikes</string>
+    <string name="grade_bikeStations">Amount of Nextbike stations</string>
+    <string name="grade_bikeDistance">Distance to closest Nextbike</string>
+    <string name="grade_explanation">Explanations of the Mobility-Score:</string>
+</resources>

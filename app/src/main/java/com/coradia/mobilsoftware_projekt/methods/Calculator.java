@@ -1,5 +1,7 @@
 package com.coradia.mobilsoftware_projekt.methods;
 
+import android.content.SharedPreferences;
+
 import java.util.List;
 
 public class Calculator {
@@ -80,7 +82,7 @@ public class Calculator {
 
 
     //Notenrechner Finale MobileScore Note
-    public String getFinalGrade(List<StopInfo> stopInfoList, List<NextbikeInfo> nextbikeInfoList) {
+    public String getFinalGrade(List<StopInfo> stopInfoList, List<NextbikeInfo> nextbikeInfoList, SharedPreferences sharedPreferences) {
 
         int stopAmount = stopInfoList.size();
         double stopDistance = stopInfoList.get(0).getEntfernung();
@@ -95,7 +97,6 @@ public class Calculator {
 
         int[] productClasses = new int[20];
 
-
         for (int i = 0; i < stopInfoList.size(); i++) {
             int[] productList = stopInfoList.get(i).getProductClasses();
 
@@ -103,17 +104,27 @@ public class Calculator {
                 productClasses[j] = 1;
             }
         }
+        int productClassesAmount = 0;
+        for (int productClass : productClasses) {
+            if (productClass == 1) productClassesAmount++;
+        }
 
         int bikeAmount = NextbikeInfo.getTotalBikeCount(nextbikeInfoList);
         int bikeStationAmount = NextbikeInfo.getTotalStationCount(nextbikeInfoList);
 
         double bikeDistance;
+        long bikeDistanceRound = -1;
         if (nextbikeInfoList.size() != 0) {
             bikeDistance = nextbikeInfoList.get(0).getDist();
+            bikeDistanceRound = Math.round(bikeDistance);
         } else {
             bikeDistance = Double.MAX_VALUE;
         }
 
+        String valueList = stopAmount + "," + Math.round(stopDistance) + "," + Math.round(stopDeparture) + "," + productClassesAmount + "," + bikeAmount + "," + bikeStationAmount + "," + bikeDistanceRound;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("valueList", valueList);
+        editor.apply();
 
         double bikegrade1 = getGradeBikeAmount(bikeAmount);
         double bikegrade2 = getGradeBikeStationAmount(bikeStationAmount);

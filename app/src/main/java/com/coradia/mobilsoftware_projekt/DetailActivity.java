@@ -77,7 +77,7 @@ public class DetailActivity extends AppCompatActivity {
 
     Handler h = new Handler();
     Runnable r;
-    int delay = 1000 * 2;
+    int delay = 1000;
     @Override
     protected void onResume() {
         boolean toggleReCreate = sharedPreferences.getBoolean("detailCallReCreate", false);
@@ -98,11 +98,33 @@ public class DetailActivity extends AppCompatActivity {
         TextView grade_waiting = findViewById(R.id.grade_waiting);
         ScrollView score = findViewById(R.id.scroll);
         TextView grade_final_num = findViewById(R.id.grade_final_num);
+        TextView grade_pt_num = findViewById(R.id.grade_pt_num);
+        TextView grade_pt1_num = findViewById(R.id.grade_pt1_num);
+        TextView grade_pt2_num = findViewById(R.id.grade_pt2_num);
+        TextView grade_pt3_num = findViewById(R.id.grade_pt3_num);
+        TextView grade_pt4_num = findViewById(R.id.grade_pt4_num);
+        TextView grade_pt1_val = findViewById(R.id.grade_pt1_val);
+        TextView grade_pt2_val = findViewById(R.id.grade_pt2_val);
+        TextView grade_pt3_val = findViewById(R.id.grade_pt3_val);
+        TextView grade_pt4_val = findViewById(R.id.grade_pt4_val);
+        TextView grade_bike_num = findViewById(R.id.grade_bike_num);
+        TextView grade_bike1_num = findViewById(R.id.grade_bike1_num);
+        TextView grade_bike2_num = findViewById(R.id.grade_bike2_num);
+        TextView grade_bike3_num = findViewById(R.id.grade_bike3_num);
+        TextView grade_bike1_val = findViewById(R.id.grade_bike1_val);
+        TextView grade_bike2_val = findViewById(R.id.grade_bike2_val);
+        TextView grade_bike3_val = findViewById(R.id.grade_bike3_val);
+
         h.postDelayed(r = () -> {
             toggleDetails = sharedPreferences.getBoolean("toggleDetails", false);
             if (toggleDetails) {
                 String grade = sharedPreferences.getString("scoreDetails", "");
+                String values = sharedPreferences.getString("valueList", "");
                 if (!grade.equals("")) {
+                    StringTokenizer v = new StringTokenizer(values, ",");
+                    String[] ptValue = new String[4];
+                    String[] bikeValue = new String[3];
+
                     StringTokenizer g = new StringTokenizer(grade, ";");
 
                     String finalGrade = g.nextToken();
@@ -113,7 +135,9 @@ public class DetailActivity extends AppCompatActivity {
                     StringTokenizer pt = new StringTokenizer(g.nextToken(), ",");
                     for (int i = 0; i < 4; i++) {
                         ptGrade[i+1] = pt.nextToken();
+                        ptValue[i] = v.nextToken();
                     }
+                    ptValue[1] = ptValue[1] + "m";
 
                     String[] bikeGrade = new String[4];
                     bikeGrade[0] = g.nextToken();
@@ -121,7 +145,9 @@ public class DetailActivity extends AppCompatActivity {
                     StringTokenizer bike = new StringTokenizer(g.nextToken(), ",");
                     for (int i = 0; i < 3; i++) {
                         bikeGrade[i+1] = bike.nextToken();
+                        bikeValue[i] = v.nextToken();
                     }
+                    bikeValue[2] = bikeValue[2] + "m";
 
                     Log.i("Grade", "Final Grade: " + finalGrade);
                     for (int i = 0; i < ptGrade.length; i++) {
@@ -132,6 +158,22 @@ public class DetailActivity extends AppCompatActivity {
                     }
 
                     grade_final_num.setText(finalGrade);
+                    grade_pt_num.setText(ptGrade[0]);
+                    grade_pt1_num.setText(ptGrade[1]);
+                    grade_pt2_num.setText(ptGrade[2]);
+                    grade_pt3_num.setText(ptGrade[3]);
+                    grade_pt4_num.setText(ptGrade[4]);
+                    grade_pt1_val.setText(ptValue[0]);
+                    grade_pt2_val.setText(ptValue[1]);
+                    grade_pt3_val.setText(ptValue[2]);
+                    grade_pt4_val.setText(ptValue[3]);
+                    grade_bike_num.setText(bikeGrade[0]);
+                    grade_bike1_num.setText(bikeGrade[1]);
+                    grade_bike2_num.setText(bikeGrade[2]);
+                    grade_bike3_num.setText(bikeGrade[3]);
+                    grade_bike1_val.setText(bikeValue[0]);
+                    grade_bike2_val.setText(bikeValue[1]);
+                    grade_bike3_val.setText(bikeValue[2]);
                     grade_waiting.setVisibility(View.INVISIBLE);
                     score.setVisibility(View.VISIBLE);
                 }
