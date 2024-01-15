@@ -27,4 +27,16 @@
     <string name="grade_bikeStations">Amount of Nextbike stations</string>
     <string name="grade_bikeDistance">Distance to closest Nextbike</string>
     <string name="grade_explanation">Explanations of the Mobility-Score:</string>
+    <string name="detail_explanation1">Wie du siehst setzt sich dein Mobility-Score aus verschiedenen Aspekten zusammen. \n
+        Grundlegend werden beim Mobility-Score zwei Aspekte berücksichtigt - zum einem das Bus und Bahn Angebot in deiner Umgebung - zum anderen das Bikesharing Angebot. Für jedes dieser Angebote berechnet dir bwScore zunächst eine eigene Note und verrechnet diese am Ende (je nach deinen Präferenzen) zu einem gesamten Score. Hierbei betrachten wir alles was bis zu 1,5km von dir entfernt ist! \n \n</string>
+    <string name="detail_explanation2">Die Note für den ÖPNV setzt sich aus vier Aspekten zusammen: \n</string>
+    <string name="detail_explanation3"> -Anzahl Haltestelle in deiner Nähe (Note 1 gibt es ab 20 Haltestellen, Note 6 bei keiner einzigen :( ) \n
+        -Die Entfernung zu deiner nächsten Haltestelle (Note 1 gibt es ab weniger als 250m, Note 6 ab 1km) \
+        -Die Anzahl an Abfahrten (Note 1 bei 12 oder mehr Abfahrten innerhalb der nächsten halben Stunde, Note 6 bei keiner einzigen Abfahrt in der nächsten halbe Stunde | !ACHTUNG! Die Anzahl an Abfahrten die wir berücksichtigen ist der Durchschnittswert für alle Haltestellen in deiner Umgebung) \n
+        -Die verschiedenen Typen an Verkehrsmitteln: Hierbei kommt es nicht nur auf die Anzahl, sondern vor allem auf die Qualität der einzelnen Verkehrsmitteln an. Richtige Zugangebote erhalten 4 Punkte, Schienenverkehr wie U-Bahn oder Tram erhalten 3 Punkte, Straßenverkehr wie Busse erhalten 2 Punkte und On-Demand-Verkehre nur einen Punkt. Die Note 1 gibt es dann ab 12 Punkten! \n \n </string>
+    <string name="detail_explanation4">Bei den Bike-Sharing Angeboten achten wir auf drei Sachen:</string>
+    <string name="detail_explanation5">-Anzahl Nextbikes (Note 1 ab 125 Rädern, Note 6 ab 0 Rädern) \n
+        -Anzahl Nextbike Stationen (Note 1 ab 7 Stationen, Note 6 bei keiner einzigen Station) \n
+        -Abstand zum nächsten Nextbike (Note 1 bis 50m, Note 6 ab 1km) \n \n</string>
+    <string name="detail_explanation6">Damit bist nun bestens über deinen Mobility-Score informiert und verstehst nun was dein Mobility-Score dir über deine Umgebung verrät!</string>
 </resources>
