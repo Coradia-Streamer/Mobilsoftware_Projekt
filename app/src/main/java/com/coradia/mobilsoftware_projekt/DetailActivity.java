@@ -173,7 +173,9 @@ public class DetailActivity extends AppCompatActivity {
                     grade_bike3_num.setText(bikeGrade[3]);
                     grade_bike1_val.setText(bikeValue[0]);
                     grade_bike2_val.setText(bikeValue[1]);
-                    grade_bike3_val.setText(bikeValue[2]);
+                    if (bikeValue[2].equals("-1m")) {
+                        grade_bike3_val.setText(R.string.no_value);
+                    } else grade_bike3_val.setText(bikeValue[2]);
                     grade_waiting.setVisibility(View.INVISIBLE);
                     score.setVisibility(View.VISIBLE);
                 }

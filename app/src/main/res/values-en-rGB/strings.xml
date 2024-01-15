@@ -13,6 +13,7 @@
     <string name="waiting_score">Here will appear an overview over the details of your Mobility-Scoere\n \n \n But first, a Mobility-Score has to be calculated via \'SCORE\'</string>
     <string name="grade_header">Details of your Mobility-Score</string>
     <string name="test">Test Value</string>
+    <string name="no_value">None</string>
     <string name="line_description">Parting line</string>
     <string name="grade_final">Final Grade</string>
     <string name="grade_pt">Public Transport Grade</string>

@@ -12,6 +12,7 @@
     <string name="waiting_score">Hier erscheint eine Übersicht zu den Details des Mobility-Scores\n \n \n Zuerst über \'SCORE\' einen Mobility-Score berechnen lassen</string>
     <string name="grade_header">Details zu deinem Mobility-Score</string>
     <string name="test">Test Value</string>
+    <string name="no_value">None</string>
     <string name="line_description">Trennlinie</string>
     <string name="grade_final">Gesamtnote</string>
     <string name="grade_pt">ÖPNV Note</string>

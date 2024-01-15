@@ -497,6 +497,8 @@ public class MapActivity extends AppCompatActivity {
                     }
                 }
 
+                //if (stopInfoList.isEmpty())
+
                 //Abspeichern der ANZAHL aller Abfahrten an einer Haltestelle in die StopInfoList zur passenden Haltestelle
                 for (StopInfo stopInfo : stopInfoList) {
                     if (stopInfo.getStationId() != null) {
