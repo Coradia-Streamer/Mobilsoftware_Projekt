@@ -10,6 +10,7 @@
         <item name="colorSecondary">@color/darkColorSecondary</item>
         <item name="colorSecondaryVariant">@color/darkColorSecondaryVariant</item>
         <item name="colorSecondaryContainer">@color/darkColorSecondary</item>
+        <item name="colorSecondaryFixed">@color/darkColorSecondary</item>
         <item name="colorOnSecondary">@color/darkColorOnSecondary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/darkColorPrimary</item>
@@ -43,6 +44,7 @@
         <item name="colorSecondary">@color/lightColorSecondary</item>
         <item name="colorSecondaryVariant">@color/lightColorSecondaryVariant</item>
         <item name="colorSecondaryContainer">@color/lightColorOnPrimary</item>
+        <item name="colorSecondaryFixed">@color/lightColorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/lightColorOnSecondary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/lightColorPrimary</item>

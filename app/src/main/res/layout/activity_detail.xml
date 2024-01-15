@@ -12,7 +12,8 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="60dp"
+        android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,7 @@
         />
 
     <TextView
-        android:id="@+id/waiting"
+        android:id="@+id/grade_waiting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
@@ -53,5 +54,260 @@
         android:textColor="?attr/colorOnSecondary"
         android:textSize="30sp"
         android:textAlignment="center"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:visibility="invisible"/>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="101dp"
+        android:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/grade_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingVertical="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:text="@string/grade_header"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
+
+            <ImageView
+                android:id="@+id/details_line1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintTop_toBottomOf="@id/grade_header"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/line"
+                android:contentDescription="@string/line_description"/>
+
+            <TextView
+                android:id="@+id/grade_final"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_line1"
+                app:layout_constraintStart_toStartOf="@id/grade_header"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/grade_final"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_final_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/grade_final"
+                app:layout_constraintEnd_toEndOf="@+id/grade_header"
+                android:layout_marginEnd="10dp"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="textEnd"/>
+
+            <TextView
+                android:id="@+id/grade_subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_final"
+                app:layout_constraintStart_toStartOf="@id/grade_header"
+                android:layout_marginStart="30dp"
+                android:text="@string/grade_offset"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="14sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_pt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_final"
+                app:layout_constraintStart_toStartOf="@id/grade_header"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="30dp"
+                android:text="@string/grade_pt"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_subhead_pt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_pt"
+                app:layout_constraintStart_toStartOf="@id/grade_header"
+                android:layout_marginStart="50dp"
+                android:text="@string/grade_offset"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="14sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_pt1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_subhead_pt"
+                app:layout_constraintStart_toStartOf="@id/grade_pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/grade_stopAmount"
+                android:textColor="?attr/colorSecondaryFixed"
+                android:textSize="16sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_pt2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_pt1"
+                app:layout_constraintStart_toStartOf="@id/grade_pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/grade_stopDistance"
+                android:textColor="?attr/colorSecondaryFixed"
+                android:textSize="16sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_pt3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_pt2"
+                app:layout_constraintStart_toStartOf="@id/grade_pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/grade_stopDeparture"
+                android:textColor="?attr/colorSecondaryFixed"
+                android:textSize="16sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_pt4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_pt3"
+                app:layout_constraintStart_toStartOf="@id/grade_pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/grade_stopModules"
+                android:textColor="?attr/colorSecondaryFixed"
+                android:textSize="16sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_bike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_pt4"
+                app:layout_constraintStart_toStartOf="@id/grade_header"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="30dp"
+                android:text="@string/grade_bike"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_subhead_bike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_bike"
+                app:layout_constraintStart_toStartOf="@id/grade_header"
+                android:layout_marginStart="50dp"
+                android:text="@string/grade_offset"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="14sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_bike1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_subhead_bike"
+                app:layout_constraintStart_toStartOf="@id/grade_pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/grade_bikeAmount"
+                android:textColor="?attr/colorSecondaryFixed"
+                android:textSize="16sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_bike2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_bike1"
+                app:layout_constraintStart_toStartOf="@id/grade_pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/grade_bikeStations"
+                android:textColor="?attr/colorSecondaryFixed"
+                android:textSize="16sp"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:id="@+id/grade_bike3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_bike2"
+                app:layout_constraintStart_toStartOf="@id/grade_pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/grade_bikeDistance"
+                android:textColor="?attr/colorSecondaryFixed"
+                android:textSize="16sp"
+                android:textAlignment="textStart"/>
+
+            <ImageView
+                android:id="@+id/details_line2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintTop_toBottomOf="@id/grade_bike3"
+                android:layout_marginTop="30dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/line"
+                android:contentDescription="@string/line_description"/>
+
+            <TextView
+                android:id="@+id/grade_explanation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_line2"
+                android:paddingVertical="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:text="@string/grade_explanation"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/grade_explanation"
+                android:layout_marginHorizontal="10dp"
+                android:text="@string/waiting_score"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

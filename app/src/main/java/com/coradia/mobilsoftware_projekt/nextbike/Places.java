@@ -2,8 +2,6 @@ package com.coradia.mobilsoftware_projekt.nextbike;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class Places {
     //Ist es ein Bike?
     @SerializedName("bike")

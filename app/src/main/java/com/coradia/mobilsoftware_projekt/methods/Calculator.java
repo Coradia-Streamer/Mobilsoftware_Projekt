@@ -120,15 +120,15 @@ public class Calculator {
         double bikegrade3 = getGradeBikeDistance(bikeDistance);
         double bikegrade = (bikegrade1 + bikegrade2 + bikegrade3) / 3;
 
-        double grade1 = getGradeStopAmount(stopAmount);
-        double grade2 = getGradeStopDistance(stopDistance);
-        double grade3 = getGradeStopDeparture(stopDeparture);
-        double grade4 = getGradeStopModules(productClasses);
-        double putGrade = (grade1 + grade2 + grade3 + grade4) / 4;
+        double ptgrade1 = getGradeStopAmount(stopAmount);
+        double ptgrade2 = getGradeStopDistance(stopDistance);
+        double ptgrade3 = getGradeStopDeparture(stopDeparture);
+        double ptgrade4 = getGradeStopModules(productClasses);
+        double ptGrade = (ptgrade1 + ptgrade2 + ptgrade3 + ptgrade4) / 4;
 
-        double finalGrade = (putGrade + bikegrade) / 2;
+        double finalGrade = (ptGrade + bikegrade) / 2;
 
-        return round(finalGrade) + ":" + round(finalGrade) + ";" + round(putGrade) + ";" + round(grade1) + "," + round(grade2) + "," + round(grade3) + "," + round(grade4) + ";" + round(bikegrade) + ";" + round(bikegrade1) + "," + round(bikegrade2) + "," + round(bikegrade3);
+        return round(finalGrade) + ":" + round(finalGrade) + ";" + round(ptGrade) + ";" + round(ptgrade1) + "," + round(ptgrade2) + "," + round(ptgrade3) + "," + round(ptgrade4) + ";" + round(bikegrade) + ";" + round(bikegrade1) + "," + round(bikegrade2) + "," + round(bikegrade3);
     }
 
     public double castGrade(double grade) {

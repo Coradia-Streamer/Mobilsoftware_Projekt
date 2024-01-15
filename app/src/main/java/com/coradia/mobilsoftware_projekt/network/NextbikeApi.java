@@ -1,7 +1,6 @@
 package com.coradia.mobilsoftware_projekt.network;
 
 import com.coradia.mobilsoftware_projekt.nextbike.NextbikeResponse;
-import com.coradia.mobilsoftware_projekt.objects.EfaCoordResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

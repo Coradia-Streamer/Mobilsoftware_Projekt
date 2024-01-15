@@ -10,4 +10,19 @@
     <string name="details_description">Details</string>
     <string name="light_theme_name">Light Theme</string>
     <string name="waiting_score">Hier erscheint eine Übersicht zu den Details des Mobility-Scores\n \n \n Zuerst über \'SCORE\' einen Mobility-Score berechnen lassen</string>
+    <string name="grade_header">Details zu deinem Mobility-Score</string>
+    <string name="test">Test Value</string>
+    <string name="line_description">Trennlinie</string>
+    <string name="grade_final">Gesamtnote</string>
+    <string name="grade_pt">ÖPNV Note</string>
+    <string name="grade_bike">Nextbike Note</string>
+    <string name="grade_offset">setzt sich zusammen aus:</string>
+    <string name="grade_stopAmount">Anzahl der Haltestellen</string>
+    <string name="grade_stopDistance">Entfernung zu den Haltestellen</string>
+    <string name="grade_stopDeparture">Abfahrten an den Haltestellen</string>
+    <string name="grade_stopModules">Anzahl Verkehrsmitteltypen</string>
+    <string name="grade_bikeAmount">Anzahl der Fahrräder</string>
+    <string name="grade_bikeStations">Anzahl der Nextbike Stationen</string>
+    <string name="grade_bikeDistance">Entfernung zum nächsten Nextbike</string>
+    <string name="grade_explanation">Erläuterungen zum Mobility-Score:</string>
 </resources>

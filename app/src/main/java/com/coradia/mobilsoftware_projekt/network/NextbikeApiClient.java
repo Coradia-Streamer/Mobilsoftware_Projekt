@@ -1,7 +1,5 @@
 package com.coradia.mobilsoftware_projekt.network;
 
-import java.util.Locale;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

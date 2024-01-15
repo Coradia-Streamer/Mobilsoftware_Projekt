@@ -10,7 +10,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,6 +95,9 @@ public class DetailActivity extends AppCompatActivity {
         }
         super.onResume();
 
+        TextView grade_waiting = findViewById(R.id.grade_waiting);
+        ScrollView score = findViewById(R.id.scroll);
+        TextView grade_final_num = findViewById(R.id.grade_final_num);
         h.postDelayed(r = () -> {
             toggleDetails = sharedPreferences.getBoolean("toggleDetails", false);
             if (toggleDetails) {
@@ -101,12 +107,12 @@ public class DetailActivity extends AppCompatActivity {
 
                     String finalGrade = g.nextToken();
 
-                    String[] oepnvGrade = new String[5];
-                    oepnvGrade[0] = g.nextToken();
+                    String[] ptGrade = new String[5];
+                    ptGrade[0] = g.nextToken();
 
-                    StringTokenizer oepnv = new StringTokenizer(g.nextToken(), ",");
+                    StringTokenizer pt = new StringTokenizer(g.nextToken(), ",");
                     for (int i = 0; i < 4; i++) {
-                        oepnvGrade[i+1] = oepnv.nextToken();
+                        ptGrade[i+1] = pt.nextToken();
                     }
 
                     String[] bikeGrade = new String[4];
@@ -118,12 +124,16 @@ public class DetailActivity extends AppCompatActivity {
                     }
 
                     Log.i("Grade", "Final Grade: " + finalGrade);
-                    for (int i = 0; i < oepnvGrade.length; i++) {
-                        Log.i("Grade", "ÖPNV Grade" + i + ": " + oepnvGrade[i]);
+                    for (int i = 0; i < ptGrade.length; i++) {
+                        Log.i("Grade", "PublicTransport Grade" + i + ": " + ptGrade[i]);
                     }
                     for (int i = 0; i < bikeGrade.length; i++) {
                         Log.i("Grade", "Bike Grade" + i + ": " + bikeGrade[i]);
                     }
+
+                    grade_final_num.setText(finalGrade);
+                    grade_waiting.setVisibility(View.INVISIBLE);
+                    score.setVisibility(View.VISIBLE);
                 }
             }
         }, delay);
