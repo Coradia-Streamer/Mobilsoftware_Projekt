@@ -55,7 +55,7 @@
     <View
         android:id="@+id/shadow_background_top"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="10dp"
         android:background="@drawable/shadow_background"
         android:rotation="180"
         app:layout_constraintTop_toTopOf="@id/testMap" />
@@ -80,7 +80,7 @@
     <View
         android:id="@+id/shadow_background_bottom"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="10dp"
         android:background="@drawable/shadow_background"
         app:layout_constraintBottom_toTopOf="@+id/mobscoreContainer" />
 
@@ -109,7 +109,7 @@
         <View
             android:id="@+id/shadow_background_scoretop"
             android:layout_width="match_parent"
-            android:layout_height="15dp"
+            android:layout_height="10dp"
             app:layout_constraintTop_toBottomOf="@id/mobscore"
             android:alpha="0.25"
             android:rotation="180"
@@ -118,7 +118,7 @@
         <View
             android:id="@+id/shadow_background_scorebottom"
             android:layout_width="match_parent"
-            android:layout_height="15dp"
+            android:layout_height="10dp"
             app:layout_constraintBottom_toBottomOf="@id/mobscoreContainer"
             android:layout_marginBottom="1dp"
             android:alpha="0.25"
