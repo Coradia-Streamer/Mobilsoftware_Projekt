@@ -15,12 +15,14 @@ public class Calculator {
 
     //Notenrechner Haltestellenabstand
     public double getGradeStopDistance(double stopDistance) {
+        if (stopDistance == -1) return 6;
         double grade = 1.0 / 150 * stopDistance - 2.0 / 3;
         return castGrade(grade);
     }
 
     //Notenrechner Abfahrten
     public double getGradeStopDeparture(double stopDeparture) {
+        if (stopDeparture == -1) return 6;
         double grade = 6 - 5.0 * (stopDeparture) / (12);
         return castGrade(grade);
     }
@@ -33,6 +35,7 @@ public class Calculator {
         int ondemand = 0;
         int sonstige = 0;
 
+        if (productClasses == null) return 6;
         for (int i = 0; i < productClasses.length; i++) {
             if (i == 0 && productClasses[i] == 1 || i == 1 && productClasses[i] == 1 || i == 13 && productClasses[i] == 1 || i == 14 && productClasses[i] == 1 || i == 15 && productClasses[i] == 1 || i == 16 && productClasses[i] == 1 || i == 17 && productClasses[i] == 1 || i == 18 && productClasses[i] == 1) {
                 bahn++;
@@ -84,30 +87,45 @@ public class Calculator {
     //Notenrechner Finale MobileScore Note
     public String getFinalGrade(List<StopInfo> stopInfoList, List<NextbikeInfo> nextbikeInfoList, SharedPreferences sharedPreferences) {
 
-        int stopAmount = stopInfoList.size();
-        double stopDistance = stopInfoList.get(0).getEntfernung();
+        int stopAmount;
+        double stopDistance;
+        double stopDeparture;
+        int[] productClasses;
+        int productClassesAmount;
 
-        double stopDeparture = 0;
+        if (stopInfoList.isEmpty()) {
+            stopAmount = 0;
+            stopDistance = -1;
+            stopDeparture = -1;
+            productClasses = null;
+            productClassesAmount = 0;
+        } else {
+            stopAmount = stopInfoList.size();
+            stopDistance = stopInfoList.get(0).getEntfernung();
 
-        for (int i = 0; i < stopInfoList.size(); i++) {
-            stopDeparture = stopDeparture + stopInfoList.get(i).getDepartures();
-        }
+            stopDeparture = 0;
 
-        stopDeparture = stopDeparture / stopInfoList.size() * 1 / 2;
+            for (int i = 0; i < stopInfoList.size(); i++) {
+                stopDeparture = stopDeparture + stopInfoList.get(i).getDepartures();
+            }
 
-        int[] productClasses = new int[20];
+            stopDeparture = stopDeparture / stopInfoList.size() * 1 / 2;
 
-        for (int i = 0; i < stopInfoList.size(); i++) {
-            int[] productList = stopInfoList.get(i).getProductClasses();
+            productClasses = new int[20];
 
-            for (int j : productList) {
-                productClasses[j] = 1;
+            for (int i = 0; i < stopInfoList.size(); i++) {
+                int[] productList = stopInfoList.get(i).getProductClasses();
+
+                for (int j : productList) {
+                    productClasses[j] = 1;
+                }
+            }
+            productClassesAmount = 0;
+            for (int productClass : productClasses) {
+                if (productClass == 1) productClassesAmount++;
             }
         }
-        int productClassesAmount = 0;
-        for (int productClass : productClasses) {
-            if (productClass == 1) productClassesAmount++;
-        }
+
 
         int bikeAmount = NextbikeInfo.getTotalBikeCount(nextbikeInfoList);
         int bikeStationAmount = NextbikeInfo.getTotalStationCount(nextbikeInfoList);

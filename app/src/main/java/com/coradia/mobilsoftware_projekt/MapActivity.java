@@ -76,9 +76,12 @@ public class MapActivity extends AppCompatActivity {
     private Intent starterIntent;
     private MapView mapView;
     private TextView textView;
-    Boolean toggleProgress = FALSE;
-    Boolean togglePermission = FALSE;
-    boolean toggleFirst = FALSE;
+    boolean toggleProgress = false;
+    boolean togglePermission = false;
+    boolean toggleFirst = false;
+
+    boolean nextbike = false;
+    boolean efa = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -427,6 +430,8 @@ public class MapActivity extends AppCompatActivity {
 
 
                 //Abfrage der Abfahrten
+                if (stopInfoList.isEmpty()) efa = true;
+
                 for (StopInfo daten : stopInfoList) {
                     String stationId = daten.getStationId();
                     requestDeparture(stationId);
@@ -473,31 +478,32 @@ public class MapActivity extends AppCompatActivity {
                 String zFormattedCompareTime = CompareTime.compareTime();
                 Log.d("ZformattedCompareTime", zFormattedCompareTime);
 
-                if (Objects.requireNonNull(response.body()).getstopEvents() == null) {
-                    Log.d("MapActivity", "keine Abfahrten");
-                } else {
+                if (response.body() != null) {
+                    if (response.body().getstopEvents()  == null) {
+                        Log.d("MapActivity", "keine Abfahrten");
+                        efa = true;
+                    } else {
 
-                    Log.d("MapActivity", String.format("Response %d Departures", response.body().getstopEvents().size()));
-                    List<StopEvents> stopEvents = response.body().getstopEvents();
+                        Log.d("MapActivity", String.format("Response %d Departures", response.body().getstopEvents().size()));
+                        List<StopEvents> stopEvents = response.body().getstopEvents();
 
-                    //Abruf und Abspeichern aller Abfahrten an einer Haltestelle
-                    for (int i = 0; i < stopEvents.size(); i++) {
-                        StopEvents stopEvent = stopEvents.get(i);
-                        String departureTimePlanned = stopEvent.getDepartureTimePlanned();
+                        //Abruf und Abspeichern aller Abfahrten an einer Haltestelle
+                        for (int i = 0; i < stopEvents.size(); i++) {
+                            StopEvents stopEvent = stopEvents.get(i);
+                            String departureTimePlanned = stopEvent.getDepartureTimePlanned();
 
-                        Instant instantCompare = Instant.parse(zFormattedCompareTime);
-                        Instant instantDeparture = Instant.parse(departureTimePlanned);
+                            Instant instantCompare = Instant.parse(zFormattedCompareTime);
+                            Instant instantDeparture = Instant.parse(departureTimePlanned);
 
-                        if (instantCompare.isAfter(instantDeparture)) {
-                            Log.d("MapActivity", String.format("Die Abfahrt ist um %s und somit vor %s", departureTimePlanned, zFormattedCompareTime));
-                            stopDepartureList.add(departureTimePlanned);
+                            if (instantCompare.isAfter(instantDeparture)) {
+                                Log.d("MapActivity", String.format("Die Abfahrt ist um %s und somit vor %s", departureTimePlanned, zFormattedCompareTime));
+                                stopDepartureList.add(departureTimePlanned);
+                            }
                         }
-
-
                     }
+                } else {
+                    efa = true;
                 }
-
-                //if (stopInfoList.isEmpty())
 
                 //Abspeichern der ANZAHL aller Abfahrten an einer Haltestelle in die StopInfoList zur passenden Haltestelle
                 for (StopInfo stopInfo : stopInfoList) {
@@ -514,16 +520,7 @@ public class MapActivity extends AppCompatActivity {
                             if (Objects.equals(stopInfo1.getStationId(), stationID)) {
 
                                 StopInfo.loggeStopInfoListe(stopInfoList);
-
-                                Calculator calculator = new Calculator();
-                                String scoreDetails = calculator.getFinalGrade(stopInfoList, nextbikeInfoList, sharedPreferences);
-                                StringTokenizer st = new StringTokenizer(scoreDetails, ":");
-                                textView.setText(st.nextToken());
-
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean("toggleDetails", true);
-                                editor.putString("scoreDetails", st.nextToken());
-                                editor.apply();
+                                efa = true;
                             }
 
                         }
@@ -531,6 +528,11 @@ public class MapActivity extends AppCompatActivity {
 
                 }
 
+                if (efa && nextbike) {
+                    efa = false;
+                    nextbike = false;
+                    calculate();
+                }
             }
 
             @Override
@@ -599,10 +601,14 @@ public class MapActivity extends AppCompatActivity {
                     }
                 }
 
+                nextbike = true;
                 NextbikeInfo.loggeNextbikeInfoListe(nextbikeInfoList);
 
-
-
+                if (efa && nextbike) {
+                    efa = false;
+                    nextbike = false;
+                    calculate();
+                }
             }
 
 
@@ -613,5 +619,17 @@ public class MapActivity extends AppCompatActivity {
                 Log.e("Nextbike", "NextbikeAPI fehlgeschlagen");
             }
         });
+    }
+
+    public void calculate() {
+        Calculator calculator = new Calculator();
+        String scoreDetails = calculator.getFinalGrade(stopInfoList, nextbikeInfoList, sharedPreferences);
+        StringTokenizer st = new StringTokenizer(scoreDetails, ":");
+        textView.setText(st.nextToken());
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("toggleDetails", true);
+        editor.putString("scoreDetails", st.nextToken());
+        editor.apply();
     }
 }

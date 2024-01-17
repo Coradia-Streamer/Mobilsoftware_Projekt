@@ -164,8 +164,12 @@ public class DetailActivity extends AppCompatActivity {
                     grade_pt3_num.setText(ptGrade[3]);
                     grade_pt4_num.setText(ptGrade[4]);
                     grade_pt1_val.setText(ptValue[0]);
-                    grade_pt2_val.setText(ptValue[1]);
-                    grade_pt3_val.setText(ptValue[2]);
+                    if (ptValue[1].equals("-1m")) {
+                        grade_pt2_val.setText(R.string.no_value);
+                    } else grade_pt2_val.setText(ptValue[1]);
+                    if (ptValue[2].equals("-1")) {
+                        grade_pt3_val.setText("0");
+                    } else grade_pt3_val.setText(ptValue[2]);
                     grade_pt4_val.setText(ptValue[3]);
                     grade_bike_num.setText(bikeGrade[0]);
                     grade_bike1_num.setText(bikeGrade[1]);

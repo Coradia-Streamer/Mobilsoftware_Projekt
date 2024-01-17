@@ -47,4 +47,5 @@
         - Anzahl Nextbike Stationen (Note 1 ab 7 Stationen, Note 6 bei keiner einzigen Station) \n \n
         - Abstand zum nächsten Nextbike (Note 1 bis 50m, Note 6 ab 1km) \n \n</string>
     <string name="detail_explanation6">Damit solltest du nun bestens über deinen Mobility-Score informiert sein und verstehst nun, was dein Mobility-Score dir über deine Umgebung verrät!</string>
+    <string name="score_thelaend">ScoreTheLänd</string>
 </resources>
