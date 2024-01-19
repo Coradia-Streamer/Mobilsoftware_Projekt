@@ -4,7 +4,7 @@
     <string name="details_text">DETAILS</string>
     <string name="main_text">APP-INFO</string>
     <string name="map_text">SCORE</string>
-    <string name="mobscore_text">Your Mobility-Score is:</string>
+    <string name="mobscore_text">Your Mobility-Score:</string>
     <string name="action_settings">Settings</string>
     <string name="map_description">Map/Score</string>
     <string name="main_description">App-Info</string>
@@ -40,4 +40,13 @@
         -Abstand zum nächsten Nextbike (Note 1 bis 50m, Note 6 ab 1km) \n \n</string>
     <string name="detail_explanation6">Damit bist nun bestens über deinen Mobility-Score informiert und verstehst nun was dein Mobility-Score dir über deine Umgebung verrät!</string>
     <string name="score_thelaend">ScoreTheLänd</string>
+    <string name="load_start">Calculating</string>
+    <string name="action_preferences">Preferences</string>
+    <string name="pop_productClasses">Transport types</string>
+    <string name="train">Railroad</string>
+    <string name="railroad">Rail-based local transport</string>
+    <string name="road">Road-based local transport</string>
+    <string name="ondemand">On-Demand stuff</string>
+    <string name="bwegt_logo">bwegt_logo</string>
+    <string name="kvvnextbike_logo">kvvnextbike_logo</string>
 </resources>

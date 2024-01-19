@@ -1,11 +1,13 @@
 package com.coradia.mobilsoftware_projekt.methods;
 
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.util.List;
 
 public class Calculator {
 
+    SharedPreferences sharedPreferences;
     //Notenrechner ÖPNV:
     //Notenrechner Haltestellendichte
     public double getGradeStopAmount(int stopAmount) {
@@ -50,7 +52,7 @@ public class Calculator {
             }
         }
 
-        //Ansatz für Präferenzen
+        //Präferenzen
         bahn = bahn * 4;
         schiene = schiene * 3;
         strasse = strasse * 2;

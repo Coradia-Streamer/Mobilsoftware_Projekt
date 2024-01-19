@@ -174,7 +174,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 android:layout_marginTop="30dp"
                 android:layout_marginHorizontal="10dp"
-                android:contentDescription="bwegt_logo"
+                android:contentDescription="@string/bwegt_logo"
                 app:srcCompat="@drawable/bwegt_logo_neu" />
 
             <ImageView
@@ -185,7 +185,7 @@
                 app:layout_constraintStart_toStartOf="@id/welcome_text"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="30dp"
-                android:contentDescription="kvvnextbike_logo"
+                android:contentDescription="@string/kvvnextbike_logo"
                 app:srcCompat="@drawable/nextbikekvv_logo_neu" />
 
             <TextView

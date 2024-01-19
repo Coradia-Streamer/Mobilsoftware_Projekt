@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_border">
+
+    <TextView
+        android:id="@+id/pop_preferences"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/action_preferences"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pop_productClasses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/pop_preferences"
+        android:layout_marginTop="60dp"
+        android:layout_alignStart="@id/pop_preferences"
+        android:text="@string/pop_productClasses"
+        android:textAlignment="textStart"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pop_pref1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/pop_productClasses"
+        android:layout_marginTop="160dp"
+        android:layout_alignStart="@id/pop_preferences"
+        android:text="@string/light_theme_name"
+        android:textAlignment="textStart"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="20sp"
+        android:visibility="invisible"/>
+
+    <CheckBox
+        android:id="@+id/pop_pref_check1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/pop_productClasses"
+        android:layout_alignStart="@id/pop_preferences"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/train"
+        android:textColor="?attr/colorOnSecondary"/>
+
+    <CheckBox
+        android:id="@+id/pop_pref_check2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/pop_pref_check1"
+        android:layout_alignStart="@id/pop_preferences"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/railroad"
+        android:textColor="?attr/colorOnSecondary"/>
+
+    <CheckBox
+        android:id="@+id/pop_pref_check3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/pop_pref_check2"
+        android:layout_alignStart="@id/pop_preferences"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/road"
+        android:textColor="?attr/colorOnSecondary"/>
+
+    <CheckBox
+        android:id="@+id/pop_pref_check4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/pop_pref_check3"
+        android:layout_alignStart="@id/pop_preferences"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/ondemand"
+        android:textColor="?attr/colorOnSecondary"/>
+
+</RelativeLayout>

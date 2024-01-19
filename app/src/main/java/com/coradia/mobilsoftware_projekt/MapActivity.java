@@ -31,7 +31,7 @@ import androidx.core.app.ActivityCompat;
 import com.coradia.mobilsoftware_projekt.methods.Calculator;
 import com.coradia.mobilsoftware_projekt.methods.CompareTime;
 import com.coradia.mobilsoftware_projekt.methods.NextbikeInfo;
-import com.coradia.mobilsoftware_projekt.methods.PopUp;
+import com.coradia.mobilsoftware_projekt.methods.PopUpSettings;
 import com.coradia.mobilsoftware_projekt.methods.StopInfo;
 import com.coradia.mobilsoftware_projekt.network.EfaApiClient;
 import com.coradia.mobilsoftware_projekt.network.NextbikeApiClient;
@@ -39,13 +39,11 @@ import com.coradia.mobilsoftware_projekt.nextbike.Cities;
 import com.coradia.mobilsoftware_projekt.nextbike.Countries;
 import com.coradia.mobilsoftware_projekt.nextbike.NextbikeResponse;
 import com.coradia.mobilsoftware_projekt.nextbike.Places;
-import com.coradia.mobilsoftware_projekt.objects.EfaCoordResponse;
-import com.coradia.mobilsoftware_projekt.objects.EfaDepartureMonitor;
-import com.coradia.mobilsoftware_projekt.objects.Location;
-import com.coradia.mobilsoftware_projekt.objects.LocationParent;
-import com.coradia.mobilsoftware_projekt.objects.LocationProperties;
-import com.coradia.mobilsoftware_projekt.objects.ProductClassMeaning;
-import com.coradia.mobilsoftware_projekt.objects.StopEvents;
+import com.coradia.mobilsoftware_projekt.efabwegt.EfaCoordResponse;
+import com.coradia.mobilsoftware_projekt.efabwegt.EfaDepartureMonitor;
+import com.coradia.mobilsoftware_projekt.efabwegt.Location;
+import com.coradia.mobilsoftware_projekt.efabwegt.ProductClassMeaning;
+import com.coradia.mobilsoftware_projekt.efabwegt.StopEvents;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -77,7 +75,6 @@ public class MapActivity extends AppCompatActivity {
     private MapView mapView;
     private TextView textView;
     boolean toggleProgress = false;
-    boolean togglePermission = false;
     boolean toggleFirst = false;
 
     boolean nextbike = false;
@@ -95,8 +92,8 @@ public class MapActivity extends AppCompatActivity {
 
         boolean togglePopSettings = sharedPreferences.getBoolean("togglePopSettings", false);
         if (togglePopSettings) {
-            PopUp popUp = new PopUp();
-            popUp.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "MapActivity");
+            PopUpSettings popUpSettings = new PopUpSettings();
+            popUpSettings.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "MapActivity");
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("togglePopSettings", false);
@@ -170,7 +167,6 @@ public class MapActivity extends AppCompatActivity {
         Permissions.check(this, permissions, null, null, new PermissionHandler() {
             @Override
             public void onGranted() {
-                togglePermission = TRUE;
                 initialiseLocation();
                 Log.i("TAG", "onGranted: executed");
             }
@@ -178,7 +174,6 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
                 super.onDenied(context, deniedPermissions);
-                togglePermission = FALSE;
                 Log.i("TAG", "onDenied: executed");
             }
         });
@@ -188,8 +183,8 @@ public class MapActivity extends AppCompatActivity {
             public boolean onScroll(ScrollEvent event) {
                 if(!toggleFirst) {
                     movement();
-                    toggleProgress = TRUE;
-                    toggleFirst = TRUE;
+                    toggleProgress = true;
+                    toggleFirst = true;
                 }
                 return false;
             }
@@ -223,8 +218,8 @@ public class MapActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            PopUp popUp = new PopUp();
-            popUp.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "MapActivity");
+            PopUpSettings popUpSettings = new PopUpSettings();
+            popUpSettings.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "MapActivity");
             return true;
         }
 
@@ -357,19 +352,21 @@ public class MapActivity extends AppCompatActivity {
     }
 
     //Erzeugung einer Liste mit allen Informationen zu einzelnen Haltstellen und zu den Nextbikes
-    private final List<StopInfo> stopInfoList = new ArrayList<>();
-    private final List<NextbikeInfo> nextbikeInfoList = new ArrayList<>();
+    private List<NextbikeInfo> nextbikeInfoList;
+    private List<StopInfo> stopInfoList;
 
     //Erzeugung einer Liste mit allen Abfahrtszeiten einer Haltestelle
-    private final List<String> stopDepartureList = new ArrayList<>();
+    private List<String> stopDepartureList;
 
     private void movement() {
-        loadClosestStops(mapView.getMapCenter().getLatitude(), mapView.getMapCenter().getLongitude());
+        textView.setText(R.string.load_start);
+        loadEfaApiStops(mapView.getMapCenter().getLatitude(), mapView.getMapCenter().getLongitude());
+        loadNextbikeApi(mapView.getMapCenter().getLatitude(), mapView.getMapCenter().getLongitude());
+
     }
 
     //Abruf aller Haltestellen in einem bestimmten Radius
-    private void loadClosestStops(double latitude, double longitude) {
-        textView.setText("Lade Haltestellen");
+    private void loadEfaApiStops(double latitude, double longitude) {
         Call<EfaCoordResponse> efaCall = EfaApiClient
                 .getInstance()
                 .getClient()
@@ -389,79 +386,57 @@ public class MapActivity extends AppCompatActivity {
                 Log.d("MapActivity", String.format("Response %d Locations", Objects.requireNonNull(response.body()).getLocations().size()));
                 List<Location> locations = response.body().getLocations();
 
-                //Leerung der StopInfoList bei jedem Aufruf, damit bei Standortänderung die alten Einträge gelöscht werden
-                StopInfo.leereStopInfoList(stopInfoList);
-                if (stopInfoList.isEmpty()) {
-                    Log.d("MapActivity", "StopInfoListe geleert");
-                } else
-                    Log.d("MapActivity", "StopInfoListe: Leerung schlug fehl!");
+                //Instanziiere eine neue, leere StopInfo Liste
+                stopInfoList = new ArrayList<>();
 
                 //Aufrufen und Abspeichern von Haltestellenname, Entfernung (in m), Stadtname, productClasses (Verkehrsmittel), StationsID und Abfahrten innerhalb eines bestimmten Intervalls für jede Haltestelle
                 for (int i = 0; i < locations.size(); i++) {
                     Location location = locations.get(i);
-                    String haltestellenName = location.getName();
 
-                    LocationProperties distance = location.properties;
-                    double entfernung = distance.getDistance();
-
-                    LocationParent locationName = location.parent;
-                    String stadtName = locationName.getName();
-
+                    String stopName = location.getName();
+                    double distance = location.properties.getDistance();
+                    String cityName = location.parent.getName();
                     int[] productClasses = location.getProductClasses();
 
                     //Umwandlung der productClass Zahlen in tatsächliche Verkehrsmittel
                     StringBuilder productClassesString = new StringBuilder();
-                    for (int classValue : productClasses) {
-                        String classMeaning = ProductClassMeaning.getClassMeaning(classValue);
-                        productClassesString.append(classMeaning).append(", ");
-                    }
-
-                    if (productClassesString.length() > 0) {
-                        productClassesString.setLength(productClassesString.length() - 2);
+                    for (int j = 0; j < productClasses.length; j++) {
+                        if (j != 0) productClassesString.append(", ");
+                        productClassesString.append(ProductClassMeaning.getClassMeaning(productClasses[j]));
                     }
 
                     String stationId = location.getId();
                     int departures = 0; //Die Anzahl der Abfahrten wird später separat abgefragt
 
                     //Abspeichern aller Informationen in der StopInfoList
-                    StopInfo stopInfo = new StopInfo(i, stadtName, haltestellenName, entfernung, productClassesString.toString(), stationId, departures, productClasses);
+                    StopInfo stopInfo = new StopInfo(i, cityName, stopName, distance, productClassesString.toString(), stationId, departures, productClasses);
                     stopInfoList.add(stopInfo);
                 }
 
-
                 //Abfrage der Abfahrten
-                if (stopInfoList.isEmpty()) efa = true;
+                if (stopInfoList.isEmpty()) {
+                    efa = true;
+                    calculate();
+                }
 
                 for (StopInfo daten : stopInfoList) {
                     String stationId = daten.getStationId();
                     requestDeparture(stationId);
                 }
 
-
-                StopInfo.loggeStopInfoListe(stopInfoList);
-
-                loadNextbikeApi(mapView.getMapCenter().getLatitude(), mapView.getMapCenter().getLongitude());
-
-
-
+                //StopInfo.loggeStopInfoListe(stopInfoList);
             }
 
 
             @Override
             public void onFailure(@NonNull Call<EfaCoordResponse> call, @NonNull Throwable t) {
-                Log.e("MapActivity", "Failure");
+                Log.e("MapActivity", "Failure", t);
             }
         });
     }
 
-    private void leereStopDepartureList() {
-        stopDepartureList.clear();
-    }
-
     //Abruf aller Abfahrten einer Haltestelle in einem bestimmten Intervall
     private void requestDeparture(String stationID) {
-
-        textView.setText("Lade Abfahrten");
         Call<EfaDepartureMonitor> efaCall = EfaApiClient
                 .getInstance()
                 .getClient()
@@ -472,66 +447,49 @@ public class MapActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<EfaDepartureMonitor> call, @NonNull Response<EfaDepartureMonitor> response) {
                 Log.d("MapActivity", String.format("Es folgen die Abfahrten der Haltestelle %s", stationID));
 
-                //Leerung der DepartureList bei jedem Aufruf, damit nur die Abfahrten einer einzigen Haltestelle gespeichert werden
-                leereStopDepartureList();
+                //Instanziiere eine neue, leere StopDeparture Liste
+                stopDepartureList = new ArrayList<>();
 
                 String zFormattedCompareTime = CompareTime.compareTime();
                 Log.d("ZformattedCompareTime", zFormattedCompareTime);
 
-                if (response.body() != null) {
-                    if (response.body().getstopEvents()  == null) {
-                        Log.d("MapActivity", "keine Abfahrten");
-                        efa = true;
-                    } else {
+                if (Objects.requireNonNull(response.body()).getstopEvents() == null) {
+                    Log.d("MapActivity", "keine Abfahrten");
+                } else {
+                    Log.d("MapActivity", String.format("Response %d Departures", response.body().getstopEvents().size()));
+                    List<StopEvents> stopEvents = response.body().getstopEvents();
 
-                        Log.d("MapActivity", String.format("Response %d Departures", response.body().getstopEvents().size()));
-                        List<StopEvents> stopEvents = response.body().getstopEvents();
+                    //Abruf und Abspeichern aller Abfahrten an einer Haltestelle
+                    for (int i = 0; i < stopEvents.size(); i++) {
+                        String departureTimePlanned = stopEvents.get(i).getDepartureTimePlanned();
 
-                        //Abruf und Abspeichern aller Abfahrten an einer Haltestelle
-                        for (int i = 0; i < stopEvents.size(); i++) {
-                            StopEvents stopEvent = stopEvents.get(i);
-                            String departureTimePlanned = stopEvent.getDepartureTimePlanned();
+                        Instant instantCompare = Instant.parse(zFormattedCompareTime);
+                        Instant instantDeparture = Instant.parse(departureTimePlanned);
 
-                            Instant instantCompare = Instant.parse(zFormattedCompareTime);
-                            Instant instantDeparture = Instant.parse(departureTimePlanned);
-
-                            if (instantCompare.isAfter(instantDeparture)) {
-                                Log.d("MapActivity", String.format("Die Abfahrt ist um %s und somit vor %s", departureTimePlanned, zFormattedCompareTime));
-                                stopDepartureList.add(departureTimePlanned);
-                            }
+                        if (instantCompare.isAfter(instantDeparture)) {
+                            //Log.d("MapActivity", String.format("Die Abfahrt ist um %s und somit vor %s", departureTimePlanned, zFormattedCompareTime));
+                            stopDepartureList.add(departureTimePlanned);
                         }
                     }
-                } else {
-                    efa = true;
                 }
 
                 //Abspeichern der ANZAHL aller Abfahrten an einer Haltestelle in die StopInfoList zur passenden Haltestelle
                 for (StopInfo stopInfo : stopInfoList) {
-                    if (stopInfo.getStationId() != null) {
-                        if (stopInfo.getStationId().equals(stationID)) {
-                            int departures = stopDepartureList.size();
-                            Log.d("MapActivity", String.format("Die Haltestelle %s hat %s Abfahrten", stationID, departures));
-                            stopInfo.setDepartures(departures);
+                    if (stopInfo.getStationId().equals(stationID)) {
+                        int departures = stopDepartureList.size();
+                        Log.d("MapActivity", String.format("Die Haltestelle %s hat %s Abfahrten", stationID, departures));
+                        stopInfo.setDepartures(departures);
 
-                            //Loggen der kompletten StopInfoList nachdem allen Haltestellen die Anzahl der Abfahrten hinzugefügt worden sind
-                            int lastindex = stopInfoList.size() - 1;
-                            StopInfo stopInfo1 = stopInfoList.get(lastindex);
-                            Log.d("MapActivity", "Letzte Station ID: " + stopInfo1.getStationId());
-                            if (Objects.equals(stopInfo1.getStationId(), stationID)) {
-
-                                StopInfo.loggeStopInfoListe(stopInfoList);
-                                efa = true;
-                            }
-
+                        //Loggen der kompletten StopInfoList nachdem allen Haltestellen die Anzahl der Abfahrten hinzugefügt worden sind
+                        int lastindex = stopInfoList.size() - 1;
+                        StopInfo stopInfo1 = stopInfoList.get(lastindex);
+                        Log.d("MapActivity", "Letzte Station ID: " + stopInfo1.getStationId());
+                        if (Objects.equals(stopInfo1.getStationId(), stationID)) {
+                            StopInfo.loggeStopInfoListe(stopInfoList);
+                            efa = true;
+                            calculate();
                         }
                     }
-
-                }
-
-                if (efa && nextbike) {
-                    efa = false;
-                    nextbike = false;
-                    calculate();
                 }
             }
 
@@ -544,7 +502,6 @@ public class MapActivity extends AppCompatActivity {
 
     //Abruf NextbikeAPI
     private void loadNextbikeApi(double latitude, double longitude) {
-        textView.setText("Lade Nextbike Stationen");
         Call<NextbikeResponse> nextbikeResponseCall = NextbikeApiClient
                 .getInstance()
                 .getClient()
@@ -555,33 +512,20 @@ public class MapActivity extends AppCompatActivity {
                 );
 
         nextbikeResponseCall.enqueue(new Callback<NextbikeResponse>() {
-
-
-
             @Override
             public void onResponse(@NonNull Call<NextbikeResponse> call, @NonNull Response<NextbikeResponse> response) {
                 Log.d("Nextbikes", String.format("Response %d", Objects.requireNonNull(response.body()).getCountriesList().size()));
                 List<Countries> countries = response.body().getCountriesList();
 
-
-                //Leerung der StopInfoList bei jedem Aufruf, damit bei Standortänderung die alten Einträge gelöscht werden
-                NextbikeInfo.leereNextbikeInfoList(nextbikeInfoList);
-                if (nextbikeInfoList.isEmpty()) {
-                    Log.d("MapActivity", "NextbikeInfoListe geleert");
-                } else
-                    Log.d("MapActivity", "NextbikeInfoListe: Leerung schlug fehl!");
-
+                //Instanziiere eine neue, leere nexbikeInfo Liste
+                nextbikeInfoList = new ArrayList<>();
 
                 //Aufrufen und Abspeichern von Haltestellenname, Entfernung (in m), Stadtname, productClasses (Verkehrsmittel), StationsID und Abfahrten innerhalb eines bestimmten Intervalls für jede Haltestelle
                 for (int i = 0; i < countries.size(); i++) {
-                    Countries country = countries.get(i);
-
-                    List<Cities> citiesList = country.getCitiesList();
+                    List<Cities> citiesList = countries.get(i).getCitiesList();
 
                     for (int j = 0; j < citiesList.size(); j++) {
-                        Cities city = citiesList.get(j);
-
-                        List<Places> placesList = city.getPlacesList();
+                        List<Places> placesList = citiesList.get(j).getPlacesList();
 
                         for (int k = 0; k < placesList.size(); k++) {
                             Places places = placesList.get(k);
@@ -595,23 +539,14 @@ public class MapActivity extends AppCompatActivity {
                             //Abspeichern aller Informationen in der NextbikeInfoListe
                             NextbikeInfo nextbikeInfo = new NextbikeInfo(k, name, bike, spot, bikes, distance);
                             nextbikeInfoList.add(nextbikeInfo);
-
                         }
-
                     }
                 }
 
-                nextbike = true;
                 NextbikeInfo.loggeNextbikeInfoListe(nextbikeInfoList);
-
-                if (efa && nextbike) {
-                    efa = false;
-                    nextbike = false;
-                    calculate();
-                }
+                nextbike = true;
+                calculate();
             }
-
-
 
 
             @Override
@@ -622,14 +557,18 @@ public class MapActivity extends AppCompatActivity {
     }
 
     public void calculate() {
-        Calculator calculator = new Calculator();
-        String scoreDetails = calculator.getFinalGrade(stopInfoList, nextbikeInfoList, sharedPreferences);
-        StringTokenizer st = new StringTokenizer(scoreDetails, ":");
-        textView.setText(st.nextToken());
+        if (efa && nextbike) {
+            efa = false;
+            nextbike = false;
+            Calculator calculator = new Calculator();
+            String scoreDetails = calculator.getFinalGrade(stopInfoList, nextbikeInfoList, sharedPreferences);
+            StringTokenizer st = new StringTokenizer(scoreDetails, ":");
+            textView.setText(st.nextToken());
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("toggleDetails", true);
-        editor.putString("scoreDetails", st.nextToken());
-        editor.apply();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("toggleDetails", true);
+            editor.putString("scoreDetails", st.nextToken());
+            editor.apply();
+        }
     }
 }

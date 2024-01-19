@@ -16,7 +16,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.coradia.mobilsoftware_projekt.R;
 
-public class PopUp extends AppCompatActivity {
+public class PopUpSettings extends AppCompatActivity {
 
     public void openPopUpWindow(View view, Context context, SharedPreferences sharedPreferences, String activityName) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);

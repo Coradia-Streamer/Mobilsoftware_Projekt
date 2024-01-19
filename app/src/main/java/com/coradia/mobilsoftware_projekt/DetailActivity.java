@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.coradia.mobilsoftware_projekt.methods.PopUp;
+import com.coradia.mobilsoftware_projekt.methods.PopUpSettings;
 
 import java.util.Objects;
 import java.util.StringTokenizer;
@@ -43,8 +43,8 @@ public class DetailActivity extends AppCompatActivity {
 
         boolean togglePopSettings = sharedPreferences.getBoolean("togglePopSettings", false);
         if (togglePopSettings) {
-            PopUp popUp = new PopUp();
-            popUp.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "DetailActivity");
+            PopUpSettings popUpSettings = new PopUpSettings();
+            popUpSettings.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "DetailActivity");
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("togglePopSettings", false);
@@ -208,8 +208,8 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            PopUp popUp = new PopUp();
-            popUp.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "DetailActivity");
+            PopUpSettings popUpSettings = new PopUpSettings();
+            popUpSettings.openPopUpWindow(findViewById(R.id.popUp_view), activityContext, sharedPreferences, "DetailActivity");
             return true;
         }
 

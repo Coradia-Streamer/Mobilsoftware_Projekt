@@ -1,8 +1,8 @@
 package com.coradia.mobilsoftware_projekt.network;
 
-import com.coradia.mobilsoftware_projekt.objects.EfaCoordResponse;
-import com.coradia.mobilsoftware_projekt.objects.EfaDepartureMonitor;
-import com.coradia.mobilsoftware_projekt.objects.EfaStopFinderResponse;
+import com.coradia.mobilsoftware_projekt.efabwegt.EfaCoordResponse;
+import com.coradia.mobilsoftware_projekt.efabwegt.EfaDepartureMonitor;
+import com.coradia.mobilsoftware_projekt.efabwegt.EfaStopFinderResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

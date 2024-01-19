@@ -1,4 +1,4 @@
-package com.coradia.mobilsoftware_projekt.objects;
+package com.coradia.mobilsoftware_projekt.efabwegt;
 
 import java.util.HashMap;
 import java.util.Map;
